@@ -1,9 +1,12 @@
 import Router from "./components/Router/router"
+import ThemeProviderContainer from "./components/common/ThemeProviderContainer"
 
 const App =()=> {
   return (
     <>
-    <Router/>
+    <ThemeProviderContainer>
+      <Router/>
+    </ThemeProviderContainer>
     </>
   )
 }
