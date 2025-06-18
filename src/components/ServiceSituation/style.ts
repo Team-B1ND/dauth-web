@@ -2,7 +2,7 @@ import { DodamShape, DodamTypography } from '@b1nd/dds-web';
 import styled from 'styled-components';
 
 export const SectionContainer = styled.section`
-  margin-bottom: 2%;
+  margin-bottom: 16px;
   background-color: ${({ theme }) => theme.backgroundNormal};
   ${DodamShape.Large}
   padding: 20px;
@@ -42,7 +42,7 @@ export const StatHeader = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 `;
 
 export const StatTitle = styled.span`

@@ -5,8 +5,8 @@ export const SectionContainer = styled.div`
   position: fixed;
   bottom: 32px;
   right: 32px;
-  height: 50px;
-  width: 50px;
+  height: 45px;
+  width: 45px;
   background-color: ${({ theme }) => theme.primaryNormal};
   ${DodamShape.ExtraSmall}
   display: flex;

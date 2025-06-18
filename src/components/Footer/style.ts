@@ -3,16 +3,15 @@ import styled from 'styled-components';
 
 export const FooterContainer = styled.footer`
   border-top: 1px solid ${({ theme }) => theme.lineAlternative};
-  padding: 32px 20px;
+  padding: 24px 16px;
 `;
 
 export const FooterContent = styled.div`
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 24px;
-
   @media (min-width: 768px) {
     flex-direction: row;
     justify-content: space-between;
@@ -26,11 +25,9 @@ export const CompanyInfo = styled.div`
   flex-direction: column;
   gap: 8px;
   flex: 1;
-
   @media (min-width: 768px) {
     gap: 12px;
   }
-
   @media (min-width: 1024px) {
     flex-direction: row;
     gap: 26px;
@@ -42,11 +39,9 @@ export const LinkSection = styled.div`
   display: flex;
   gap: 24px;
   flex-shrink: 0;
-
   @media (min-width: 768px) {
     gap: 32px;
   }
-
   @media (max-width: 480px) {
     flex-direction: column;
     gap: 16px;
@@ -59,12 +54,11 @@ export const LinkList = styled.ul`
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px; // 8px → 6px
   min-width: 60px;
-
   @media (max-width: 480px) {
     flex-direction: row;
-    gap: 16px;
+    gap: 12px; // 16px → 12px
     flex-wrap: wrap;
   }
 `;

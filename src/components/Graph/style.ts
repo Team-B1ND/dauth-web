@@ -2,7 +2,7 @@ import { DodamShape, DodamTypography } from '@b1nd/dds-web';
 import styled from 'styled-components';
 
 export const SectionContainer = styled.section`
-  margin-bottom: 2%;
+  margin-bottom: 16px;
   background-color: ${({ theme }) => theme.backgroundNormal};
   ${DodamShape.Large}
   padding: 20px;
@@ -11,7 +11,7 @@ export const SectionContainer = styled.section`
 export const SectionTitle = styled.h2`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   ${DodamTypography.Headline.Bold}
   color: ${({ theme }) => theme.labelNormal};
   margin-bottom: 17px;
@@ -20,7 +20,7 @@ export const SectionTitle = styled.h2`
 export const GraphGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 28px;
+  gap: 20px;
   @media (min-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -31,7 +31,7 @@ export const GraphCard = styled.div`
   ${DodamShape.Medium}
   padding: 20px;
   border: none;
-  min-height: 300px;
+  min-height: 250px;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -41,7 +41,7 @@ export const GraphHeader = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 `;
 
 export const GraphTitle = styled.span`

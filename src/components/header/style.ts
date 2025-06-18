@@ -13,7 +13,7 @@ export const HeaderContainer = styled.header`
 export const Logo = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 `;
 
 // 더미 데이터
