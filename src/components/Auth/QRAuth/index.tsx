@@ -11,12 +11,15 @@ import { useEffect, useState } from "react";
 import { authQRCheckParams } from "src/api/Auth/auth.params";
 import { useAuthParams } from "src/hooks/Auth/useAuthParams";
 import { useAuthTokenFlow } from "src/hooks/Auth/useAuthTokenFlow";
+import { QRAuthSkeleton } from "src/components/common/Skeleton";
 
 const QRAuth = () => {
   const theme = useTheme();
-  const { clientId, clientSecret, redirectUrl, state, scopes } = useAuthParams();
+  const { clientId, clientSecret, redirectUrl, state, scopes } =
+    useAuthParams();
   const { handleAuthCode } = useAuthTokenFlow();
-
+  const navigate = useNavigate();
+  const location = useLocation();
   const [qrCheckParams, setQrCheckParams] = useState<authQRCheckParams | null>(
     null
   );
@@ -45,45 +48,55 @@ const QRAuth = () => {
 
   useQRCheckPollingQuery(qrCheckParams, pollingEnabled, (code) => {
     handleAuthCode(code, {
-      clientSecret,
       redirectUrl,
       state,
     });
   });
 
-  if (error) {
-    console.error(error);
-    return <S.QRContainer>QR 코드 생성에 실패했습니다.</S.QRContainer>;
-  }
-
-  if (!data) {
-    return <S.QRContainer>QR 코드를 생성 중입니다...</S.QRContainer>;
-  }
-
-  const code = data.data.code;
-  const qrValue = `https://deeplink.b1nd.com/?clientId=${clientId}&code=${code}`;
-
   return (
     <S.QRContainer>
-      <img src={Logo} alt="로고" />
-      <S.PointWord>
-        도담도담 <span>계정으로</span>
-        <br />
-        <span>client에 연결하기</span>
-      </S.PointWord>
+      {error ? (
+        "QR 코드 생성에 실패했습니다."
+      ) : !data ? (
+        <QRAuthSkeleton />
+      ) : (
+        <>
+          {(() => {
+            const code = data.data.code;
+            const qrValue = `https://deeplink.b1nd.com/?clientId=${clientId}&code=${code}`;
+            return (
+              <>
+                <img src={Logo} alt="로고" />
+                <S.PointWord>
+                  도담도담 <span>계정으로</span>
+                  <br />
+                  <span>client에 연결하기</span>
+                </S.PointWord>
 
-      <QRCode
-        value={qrValue}
-        size={180}
-        bgColor={theme.fillNormal}
-        fgColor={theme.labelNormal}
-        level="L"
-        style={{
-          padding: "20px",
-          backgroundColor: theme.fillNormal,
-          borderRadius: "12px",
-        }}
-      />
+                <QRCode
+                  value={qrValue}
+                  size={180}
+                  bgColor={theme.fillNormal}
+                  fgColor={theme.labelNormal}
+                  level="L"
+                  style={{
+                    padding: "20px",
+                    backgroundColor: theme.fillNormal,
+                    borderRadius: "12px",
+                  }}
+                />
+
+                <p>휴대폰 카메라로 QR코드를 스캔해주세요.</p>
+                <S.GoIdLink
+                  onClick={() => navigate(`/login/id${location.search}`)}
+                >
+                  ID / PW로 로그인
+                </S.GoIdLink>
+              </>
+            );
+          })()}
+        </>
+      )}
     </S.QRContainer>
   );
 };

@@ -20,7 +20,6 @@ export const Container = styled.div`
   }
 `;
 
-
 export const DetailBox = styled.div`
   display: flex;
   justify-content: space-between;
@@ -28,11 +27,11 @@ export const DetailBox = styled.div`
   padding: 16px 20px;
   background-color: ${({ theme }) => theme.backgroundNormal};
   ${DodamShape.Medium}
-  height: 96px;
+  min-height: 96px;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
-    height: auto;
+    min-height: auto;
     flex-direction: column;
     gap: 12px;
   }
@@ -84,10 +83,9 @@ export const DetailColumn = styled.div`
   }
 `;
 
-
 export const DetailValueLarge = styled.div`
-${DodamTypography.Heading1.Bold}
-color: ${({theme})=> theme.labelNormal};
+  ${DodamTypography.Heading1.Bold}
+  color: ${({ theme }) => theme.labelNormal};
 
   @media (max-width: 768px) {
     font-size: 18px;
@@ -96,5 +94,7 @@ color: ${({theme})=> theme.labelNormal};
 
 export const WrapFrameworkTag = styled.div`
   display: flex;
-  gap: 4px;
-`
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 0;
+`;

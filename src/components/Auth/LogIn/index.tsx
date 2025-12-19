@@ -13,9 +13,15 @@ const LogIn = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { clientId, clientSecret, redirectUrl, scopes, state } = useAuthParams();
-  const { handleAuthCode, isTokenPending } = useAuthTokenFlow();
-  const { mutate, isPending } = usePostAuthIdLoginMutation();
+  const { clientId, clientSecret, redirectUrl, scopes, state } =
+    useAuthParams();
+  const { handleAuthCode } = useAuthTokenFlow();
+  const { mutate, isPending } = usePostAuthIdLoginMutation((data) => {
+    handleAuthCode(data.data.code, {
+      redirectUrl,
+      state,
+    });
+  });
 
   const handleLogin = async () => {
     if (!id || !password) {
@@ -23,27 +29,13 @@ const LogIn = () => {
       return;
     }
 
-    mutate(
-      {
-        id,
-        password,
-        clientId,
-        redirectUrl,
-        scopes,
-      },
-      {
-        onSuccess: (data) => {
-          handleAuthCode(data.data.code, {
-            clientSecret,
-            redirectUrl,
-            state,
-          });
-        },
-        onError: () => {
-          alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
-        },
-      }
-    );
+    mutate({
+      id,
+      password,
+      clientId,
+      redirectUrl,
+      scopes,
+    });
   };
 
   return (
@@ -81,15 +73,12 @@ const LogIn = () => {
               }}
               customStyle={{ padding: 0 }}
             />
-            <p>
-              비밀번호를 잊으셨나요? <span>비밀번호 재설정</span>
-            </p>
           </div>
         </S.WrapIdAndPassword>
 
         <S.WrapButton>
           <DodamFilledButton
-            text={isPending || isTokenPending ? "로그인 중..." : "로그인"}
+            text={isPending ? "로그인 중..." : "로그인"}
             textTheme={"staticWhite"}
             size={"Medium"}
             typography={["Body2", "Medium"]}

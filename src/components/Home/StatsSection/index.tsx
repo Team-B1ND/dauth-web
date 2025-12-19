@@ -1,11 +1,19 @@
 import * as S from "./style";
 import { BarChart, Trophy } from "@b1nd/dds-web";
-import { useGetStatsServicesCountQuery, useGetStatsUsersCountQuery } from "src/queries/App/app.query";
+import {
+  useGetStatsServicesCountQuery,
+  useGetStatsUsersCountQuery,
+} from "src/queries/App/app.query";
+import CountSkeleton from "src/components/common/Skeleton/Home/Count";
 
 const StatsSection = () => {
-  const {data: servicesData} = useGetStatsServicesCountQuery();
-  const {data: usersData} = useGetStatsUsersCountQuery();
-  
+  const { data: servicesData, isLoading: servicesLoading } =
+    useGetStatsServicesCountQuery();
+  const { data: usersData, isLoading: usersLoading } =
+    useGetStatsUsersCountQuery();
+
+  const isLoading = servicesLoading || usersLoading;
+
   return (
     <S.Container>
       <S.StatBox>
@@ -14,14 +22,20 @@ const StatsSection = () => {
           기록
         </S.StatTitle>
         <S.StatGrid>
-          <S.StatItem>
-            <span>등록된 사용자</span>
-            <p>{usersData?.data?.count || 0}명</p>
-          </S.StatItem>
-          <S.StatItem>
-            <span>DAuth 사용 서비스</span>
-            <p>{servicesData?.data?.count || 0}개</p>
-          </S.StatItem>
+          {isLoading ? (
+            <CountSkeleton />
+          ) : (
+            <>
+              <S.StatItem>
+                <span>등록된 사용자</span>
+                <p>{usersData?.data?.count || 0}명</p>
+              </S.StatItem>
+              <S.StatItem>
+                <span>DAuth 사용 서비스</span>
+                <p>{servicesData?.data?.count || 0}개</p>
+              </S.StatItem>
+            </>
+          )}
         </S.StatGrid>
       </S.StatBox>
 

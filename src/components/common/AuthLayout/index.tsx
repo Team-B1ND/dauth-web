@@ -22,9 +22,10 @@ const Container = styled.div`
 `;
 
 const Content = styled.div`
-  height: fit-content;
+  width: 25em;
+  height: 36em;
   background-color: ${({ theme }) => theme.backgroundNormal};
-  padding: 48px 64px;
+  padding: 48px 60px;
   ${DodamShape.Large}
   display: flex;
   flex-direction: column;

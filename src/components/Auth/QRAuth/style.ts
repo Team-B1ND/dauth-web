@@ -12,6 +12,11 @@ export const QRContainer = styled.div`
     height: 108px;
     margin-bottom: 24px;
   }
+
+  >p{
+      ${DodamTypography.Headline.Medium}
+      color: ${({theme})=> theme.labelNormal};
+  }
 `;
 
 export const PointWord = styled.div`
@@ -44,3 +49,9 @@ export const LoginLink = styled.div`
   margin-top: 12px;
   text-decoration: underline;
 `;
+
+export const GoIdLink = styled.div`
+  ${DodamTypography.Body2.Bold}
+  color: ${({theme})=> theme.primaryNormal};
+  text-decoration: underline;
+`

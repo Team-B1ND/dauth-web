@@ -1,17 +1,20 @@
 import ServiceCard, { ServiceCardProps } from "../ServiceCard";
 import * as S from "./style";
 import { useGetAppsQuery } from "src/queries/App/app.query";
+import { HomeSkeleton } from "src/components/common/Skeleton";
 
 const ServiceCardGrid = () => {
   const { data, isLoading, error } = useGetAppsQuery();
 
-  const services: ServiceCardProps[] = (data?.data || []).map((app) => ({
-    title: app.name,
-    url: app.url,
-    description: app.description,
-    date: app.createdAt,
-    author: app.ownerId,
-  }));
+  const services: ServiceCardProps[] = (data?.data || [])
+    .slice(0, 6)
+    .map((app) => ({
+      title: app.name,
+      url: app.url,
+      description: app.description,
+      date: app.createdAt,
+      author: app.ownerId,
+    }));
 
   return (
     <S.Section>
@@ -20,8 +23,8 @@ const ServiceCardGrid = () => {
         <span>더보기</span>
       </S.SectionHeader>
       <S.Grid>
-        {isLoading? (
-          <p>로딩 중...</p>
+        {isLoading ? (
+          <HomeSkeleton />
         ) : services.length > 0 ? (
           services.map((service, idx) => <ServiceCard key={idx} {...service} />)
         ) : (

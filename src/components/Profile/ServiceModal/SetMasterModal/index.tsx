@@ -15,19 +15,20 @@ interface SetMasterModalProps {
 
 const SetMasterModal = ({ isOpen, close, clientId }: SetMasterModalProps) => {
   const [masterId, setMasterId] = useState("");
-  const patchAppOwnerMutation = usePatchAppOwnerMutation();
+  const patchAppOwnerMutation = usePatchAppOwnerMutation(() => {
+    setMasterId("");
+    close();
+  });
 
-  const handleComplete = async () => {
+  const handleComplete = () => {
     if (!masterId.trim()) {
       alert("아이디를 입력해주세요.");
       return;
     }
-    patchAppOwnerMutation.mutateAsync({
-        clientId: clientId,
-        newOwnerDodamId: masterId,
-      });
-      setMasterId("");
-      close();
+    patchAppOwnerMutation.mutate({
+      clientId: clientId,
+      newOwnerDodamId: masterId,
+    });
   };
 
   return (

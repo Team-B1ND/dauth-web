@@ -6,6 +6,7 @@ import {
   usePatchAppMutation,
   useGetMyAppQuery,
 } from "src/queries/App/app.query";
+import { B1ndToast } from "@b1nd/b1nd-toastify";
 
 interface SetURLModalProps {
   isOpen: boolean;
@@ -25,10 +26,14 @@ const SetURLModal = ({
   const [mainUrl, setMainUrl] = useState(currentMainUrl);
   const [redirectUrl, setRedirectUrl] = useState(currentRedirectUrl);
 
-  const patchAppMutation = usePatchAppMutation();
+  const patchAppMutation = usePatchAppMutation(() => {
+    setMainUrl(currentMainUrl);
+    setRedirectUrl(currentRedirectUrl);
+    close();
+  });
   const { data: myAppData } = useGetMyAppQuery();
 
-  const handleComplete = async () => {
+  const handleComplete = () => {
     if (!mainUrl.trim() || !redirectUrl.trim()) {
       alert("모든 URL을 입력해주세요.");
       return;
@@ -51,25 +56,16 @@ const SetURLModal = ({
       return;
     }
 
-    patchAppMutation.mutate(
-      {
-        clientId,
-        name: currentApp.name,
-        description: currentApp.description,
-        url: mainUrl,
-        redirectUrl: redirectUrl,
-        isPublic: true,
-        frameworks: currentApp.frameworks?.map((fw: any) => fw.name) || [],
-        scopes: currentApp.scopes || [],
-      },
-      {
-        onSuccess: () => {
-          close();
-          setMainUrl(currentMainUrl);
-          setRedirectUrl(currentRedirectUrl);
-        },
-      }
-    );
+    patchAppMutation.mutate({
+      clientId,
+      name: currentApp.name,
+      description: currentApp.description,
+      url: mainUrl,
+      redirectUrl: redirectUrl,
+      isPublic: true,
+      frameworks: currentApp.frameworks?.map((fw: any) => fw.name) || [],
+      scopes: currentApp.scopes || [],
+    });
   };
 
   return (

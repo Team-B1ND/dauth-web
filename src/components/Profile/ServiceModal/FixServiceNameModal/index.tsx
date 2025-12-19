@@ -9,6 +9,7 @@ import {
   usePatchAppMutation,
   useGetMyAppQuery,
 } from "src/queries/App/app.query";
+import { B1ndToast } from "@b1nd/b1nd-toastify";
 
 interface FixServiceNameModalProps {
   isOpen: boolean;
@@ -28,10 +29,14 @@ const FixServiceNameModal = ({
   const [serviceName, setServiceName] = useState(currentName);
   const [description, setDescription] = useState(currentDescription);
 
-  const patchAppMutation = usePatchAppMutation();
+  const patchAppMutation = usePatchAppMutation(() => {
+    setServiceName(currentName);
+    setDescription(currentDescription);
+    close();
+  });
   const { data: myAppData } = useGetMyAppQuery();
 
-  const handleComplete = async () => {
+  const handleComplete = () => {
     if (!serviceName.trim()) {
       alert("서비스명을 입력해주세요.");
       return;
@@ -46,25 +51,16 @@ const FixServiceNameModal = ({
       return;
     }
 
-    patchAppMutation.mutate(
-      {
-        clientId,
-        name: serviceName,
-        description,
-        url: currentApp.url,
-        redirectUrl: currentApp.redirectUrl,
-        isPublic: true,
-        frameworks: currentApp.frameworks?.map((fw: any) => fw.name) || [],
-        scopes: currentApp.scopes || [],
-      },
-      {
-        onSuccess: () => {
-          close();
-          setServiceName(currentName);
-          setDescription(currentDescription);
-        },
-      }
-    );
+    patchAppMutation.mutate({
+      clientId,
+      name: serviceName,
+      description,
+      url: currentApp.url,
+      redirectUrl: currentApp.redirectUrl,
+      isPublic: true,
+      frameworks: currentApp.frameworks?.map((fw: any) => fw.name) || [],
+      scopes: currentApp.scopes || [],
+    });
   };
 
   return (

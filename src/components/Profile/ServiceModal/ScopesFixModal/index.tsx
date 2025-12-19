@@ -7,6 +7,7 @@ import {
   usePatchAppMutation,
   useGetMyAppQuery,
 } from "src/queries/App/app.query";
+import { B1ndToast } from "@b1nd/b1nd-toastify";
 
 interface ScopesFixModalProps {
   isOpen: boolean;
@@ -26,7 +27,7 @@ const ScopesFixModal = ({
   const [selectedScopes, setSelectedScopes] = useState<EScopes[]>([]);
   const isEditMode = !!clientId;
 
-  const patchAppMutation = usePatchAppMutation();
+  const patchAppMutation = usePatchAppMutation(() => close());
   const { data: myAppData } = useGetMyAppQuery();
 
   useEffect(() => {
@@ -43,40 +44,42 @@ const ScopesFixModal = ({
     );
   };
 
-  const handleComplete = async () => {
-    if (isEditMode && clientId) {
-      const currentApp = myAppData?.data?.applications?.find(
-        (app: any) => app.clientId === clientId
-      );
-
-      if (!currentApp) {
-        alert("서비스 정보를 찾을 수 없습니다.");
-        return;
-      }
-
-      patchAppMutation.mutate(
-        {
-          clientId,
-          name: currentApp.name,
-          description: currentApp.description,
-          url: currentApp.url,
-          redirectUrl: currentApp.redirectUrl,
-          isPublic: true,
-          frameworks: currentApp.frameworks?.map((fw: any) => fw.name) || [],
-          scopes: selectedScopes,
-        },
-        {
-          onSuccess: () => {
-            close();
-          },
-        }
-      );
-    } else {
-      if (onComplete) {
-        onComplete(selectedScopes);
-      }
-      setSelectedScopes([]);
+  const handleEditSubmit = () => {
+    if (!clientId) {
+      B1ndToast.showError("서비스 정보를 찾을 수 없습니다.");
+      return;
     }
+
+    const currentApp = myAppData?.data?.applications?.find(
+      (app: any) => app.clientId === clientId
+    );
+
+    if (!currentApp) {
+      B1ndToast.showError("서비스 정보를 찾을 수 없습니다.");
+      return;
+    }
+
+    patchAppMutation.mutate({
+      clientId,
+      name: currentApp.name,
+      description: currentApp.description,
+      url: currentApp.url,
+      redirectUrl: currentApp.redirectUrl,
+      isPublic: true,
+      frameworks: currentApp.frameworks?.map((fw: any) => fw.name) || [],
+      scopes: selectedScopes,
+    });
+  };
+
+  const handleCreateNext = () => {
+    onComplete?.(selectedScopes);
+    setSelectedScopes([]);
+  };
+
+  const modalConfig = {
+    buttonText: isEditMode ? "완료" : "다음",
+    onSubmit: isEditMode ? handleEditSubmit : handleCreateNext,
+    isLoading: patchAppMutation.isPending,
   };
 
   return (
@@ -106,12 +109,12 @@ const ScopesFixModal = ({
             onClick={close}
           />
           <DodamFilledButton
-            text={patchAppMutation.isPending ? "수정 중..." : "완료"}
+            text={modalConfig.isLoading ? "처리 중..." : modalConfig.buttonText}
             textTheme={"staticWhite"}
             size={"Medium"}
             typography={["Body2", "Medium"]}
             customStyle={{ height: "47px", width: "100%" }}
-            onClick={handleComplete}
+            onClick={modalConfig.onSubmit}
           />
         </S.ButtonContainer>
       </S.ScopesFixContainer>

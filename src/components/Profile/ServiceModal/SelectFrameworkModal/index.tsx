@@ -1,20 +1,32 @@
 import * as S from "./style";
-import { DodamModal, DodamFilledButton } from "@b1nd/dds-web";
-import CheckItem from "src/components/common/CheckItem";
+import {
+  DodamModal,
+  DodamFilledButton,
+  DodamErrorBoundary,
+} from "@b1nd/dds-web";
 import { useState, useEffect } from "react";
 import {
   useGetFrameworksQuery,
   usePatchAppMutation,
   useGetMyAppQuery,
 } from "src/queries/App/app.query";
-import { EScopes } from "src/enum/auth/auth.enum";
 import { FrameWork } from "src/types/App/app.type";
+import FrameworkContent from "./FrameworkContent";
+import FrameworkSkeleton from "src/components/common/Skeleton/Profile/Framework";
 
 interface SelectFrameWorkModalProps {
   isOpen: boolean;
   close: () => void;
   onComplete?: (frameworks: number[]) => void;
-  isSubmitting?: boolean;
+  isEditMode?: boolean;
+  clientId?: string;
+  currentFrameworks?: FrameWork[];
+}
+
+interface SelectFrameWorkModalProps {
+  isOpen: boolean;
+  close: () => void;
+  onComplete?: (frameworks: number[]) => void;
   isEditMode?: boolean;
   clientId?: string;
   currentFrameworks?: FrameWork[];
@@ -24,14 +36,13 @@ const SelectFrameworkModal = ({
   isOpen,
   close,
   onComplete,
-  isSubmitting = false,
   isEditMode = false,
   clientId,
   currentFrameworks,
 }: SelectFrameWorkModalProps) => {
   const [selectedFrameworks, setSelectedFrameworks] = useState<number[]>([]);
   const { data: frameworksData, isLoading } = useGetFrameworksQuery();
-  const patchAppMutation = usePatchAppMutation();
+  const patchAppMutation = usePatchAppMutation(() => close());
   const { data: myAppData } = useGetMyAppQuery();
 
   useEffect(() => {
@@ -42,66 +53,72 @@ const SelectFrameworkModal = ({
     }
   }, [isEditMode, currentFrameworks, isOpen]);
 
-  const frontendFrameworks =
-    frameworksData?.data?.filter((fw) => fw.type === "FRONTEND") || [];
-  const backendFrameworks =
-    frameworksData?.data?.filter((fw) => fw.type === "BACKEND") || [];
-
   const handleFrameworkToggle = (id: number) => {
     setSelectedFrameworks((prev) =>
       prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]
     );
   };
 
-  const handleComplete = () => {
-    close();
-    if (onComplete) {
-      onComplete(selectedFrameworks);
+  const handleEditSubmit = () => {
+    if (!clientId) {
+      alert("서비스 정보를 찾을 수 없습니다.");
+      return;
     }
+
+    const currentApp = myAppData?.data?.applications?.find(
+      (app: any) => app.clientId === clientId
+    );
+
+    if (!currentApp) {
+      alert("서비스 정보를 찾을 수 없습니다.");
+      return;
+    }
+
+    patchAppMutation.mutate({
+      clientId,
+      name: currentApp.name,
+      description: currentApp.description,
+      url: currentApp.url,
+      redirectUrl: currentApp.redirectUrl,
+      isPublic: true,
+      frameworks: selectedFrameworks.map((id) => {
+        const fw = frameworksData?.data?.find((f) => f.id === id);
+        return fw?.name || "";
+      }),
+      scopes: currentApp.scopes || [],
+    });
   };
 
-  if (isLoading) {
-    return (
-      <DodamModal isOpen={isOpen} $background>
-        <S.ScopesFixContainer>
-          <h1>프레임워크 로딩 중...</h1>
-        </S.ScopesFixContainer>
-      </DodamModal>
-    );
-  }
+  const handleCreateNext = () => {
+    onComplete?.(selectedFrameworks);
+    close();
+  };
+
+  const modalConfig = {
+    buttonText: isEditMode ? "수정" : "다음",
+    onSubmit: isEditMode ? handleEditSubmit : handleCreateNext,
+    isLoading: patchAppMutation.isPending,
+  };
+
   return (
     <DodamModal isOpen={isOpen} $background>
       <S.ScopesFixContainer>
         <h1>사용 프레임워크 선택</h1>
 
-        <S.SelectFrameworkWrapper>
-          <S.FrameworkWrapper>
-            <span>프론트엔드</span>
-            {/* {frontendFrameworks.map((fw) => (
-              <CheckItem
-                key={fw.id}
-                text={fw.name}
-                isChecked={selectedFrameworks.includes(fw.id)}
-                onChange={() => handleFrameworkToggle(fw.id)}
-              />
-            ))} */}
-            {/* {isLoading ? (
-            
-            ): ()} */}
-          </S.FrameworkWrapper>
-
-          <S.FrameworkWrapper>
-            <span>백엔드</span>
-            {backendFrameworks.map((fw) => (
-              <CheckItem
-                key={fw.id}
-                text={fw.name}
-                isChecked={selectedFrameworks.includes(fw.id)}
-                onChange={() => handleFrameworkToggle(fw.id)}
-              />
-            ))}
-          </S.FrameworkWrapper>
-        </S.SelectFrameworkWrapper>
+        <DodamErrorBoundary
+          text="프레임워크 로딩 중 에러가 발생했습니다"
+          showButton={true}
+        >
+          {isLoading ? (
+            <FrameworkSkeleton />
+          ) : (
+            <FrameworkContent
+              frameworksData={frameworksData}
+              selectedFrameworks={selectedFrameworks}
+              handleFrameworkToggle={handleFrameworkToggle}
+            />
+          )}
+        </DodamErrorBoundary>
 
         <S.ButtonContainer>
           <DodamFilledButton
@@ -113,12 +130,12 @@ const SelectFrameworkModal = ({
             onClick={close}
           />
           <DodamFilledButton
-            text="다음"
+            text={modalConfig.isLoading ? "처리 중..." : modalConfig.buttonText}
             textTheme={"staticWhite"}
             size={"Medium"}
             typography={["Body2", "Medium"]}
             customStyle={{ height: "47px", width: "100%" }}
-            onClick={handleComplete}
+            onClick={modalConfig.onSubmit}
           />
         </S.ButtonContainer>
       </S.ScopesFixContainer>
