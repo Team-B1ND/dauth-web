@@ -1,9 +1,5 @@
 import * as S from "./style";
-import {
-  DodamModal,
-  DodamFilledTextField,
-  DodamFilledButton,
-} from "@b1nd/dds-web";
+import { DodamModal, DodamFilledTextField } from "@b1nd/dds-web";
 import { useState, useEffect } from "react";
 import CheckItem from "src/components/common/CheckItem";
 
@@ -24,7 +20,12 @@ const NewServiceModal = ({ isOpen, close, onNext }: NewServiceModalProps) => {
   const [serviceDescription, setServiceDescription] = useState("");
   const [mainUrl, setMainUrl] = useState("");
   const [redirectUrl, setRedirectUrl] = useState("");
-  const [isPublic, setIsPublic] = useState(false);
+  const [isPublic, setIsPublic] = useState(true);
+
+  const isFormValid =
+    serviceName.trim() !== "" &&
+    mainUrl.trim() !== "" &&
+    redirectUrl.trim() !== "";
 
   useEffect(() => {
     if (!isOpen) {
@@ -32,12 +33,12 @@ const NewServiceModal = ({ isOpen, close, onNext }: NewServiceModalProps) => {
       setServiceDescription("");
       setMainUrl("");
       setRedirectUrl("");
-      setIsPublic(false);
+      setIsPublic(true);
     }
   }, [isOpen]);
 
   const handleNext = () => {
-    if (onNext) {
+    if (onNext && isFormValid) {
       onNext({
         serviceName,
         serviceDescription,
@@ -58,6 +59,7 @@ const NewServiceModal = ({ isOpen, close, onNext }: NewServiceModalProps) => {
           value={serviceName}
           placeholder="DAuth Service"
           onChange={(e) => setServiceName(e.target.value)}
+          onRemoveClick={() => setServiceName("")}
         />
         <DodamFilledTextField
           type="text"
@@ -65,6 +67,7 @@ const NewServiceModal = ({ isOpen, close, onNext }: NewServiceModalProps) => {
           value={serviceDescription}
           placeholder="서비스의 설명을 입력하세요."
           onChange={(e) => setServiceDescription(e.target.value)}
+          onRemoveClick={() => setServiceDescription("")}
         />
 
         <DodamFilledTextField
@@ -73,6 +76,7 @@ const NewServiceModal = ({ isOpen, close, onNext }: NewServiceModalProps) => {
           value={mainUrl}
           placeholder="https://example.com"
           onChange={(e) => setMainUrl(e.target.value)}
+          onRemoveClick={() => setMainUrl("")}
         />
         <DodamFilledTextField
           type="text"
@@ -80,6 +84,7 @@ const NewServiceModal = ({ isOpen, close, onNext }: NewServiceModalProps) => {
           value={redirectUrl}
           placeholder="https://example.com/verify"
           onChange={(e) => setRedirectUrl(e.target.value)}
+          onRemoveClick={() => setRedirectUrl("")}
         />
 
         <S.RegisterButtonContainer>
@@ -93,22 +98,10 @@ const NewServiceModal = ({ isOpen, close, onNext }: NewServiceModalProps) => {
         </S.RegisterButtonContainer>
 
         <S.ButtonContainer>
-          <DodamFilledButton
-            text="취소"
-            size={"Medium"}
-            typography={["Body2", "Medium"]}
-            customStyle={{ height: "47px", width: "100%" }}
-            backgroundColorType="Assistive"
-            onClick={close}
-          />
-          <DodamFilledButton
-            text="다음"
-            textTheme={"staticWhite"}
-            size={"Medium"}
-            typography={["Body2", "Medium"]}
-            customStyle={{ height: "47px", width: "100%" }}
-            onClick={handleNext}
-          />
+          <S.CancelButton onClick={close}>취소</S.CancelButton>
+          <S.PrimaryButton onClick={handleNext} disabled={!isFormValid}>
+            다음
+          </S.PrimaryButton>
         </S.ButtonContainer>
       </S.ServiceContainer>
     </DodamModal>

@@ -6,11 +6,15 @@ export const LogInContainer = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
+  gap: 24px;
+
   img {
     width: 108px;
     height: 108px;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
   }
-  gap: 24px;
 `;
 export const PointWord = styled.div`
   ${DodamTypography.Title2.Bold}
@@ -27,21 +31,21 @@ export const WrapIdAndPassword = styled.div`
   flex-direction: column;
   gap: 16px;
   text-align: right;
+  width: 304px;
 
-  div {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 4px;
-    height: auto;
-  }
+  /* DodamTextField border 위치 수정 */
+  > div {
+    border-bottom: 2px solid ${({ theme }) => theme.lineNormal};
+    transition: border-color 0.2s ease;
 
-  p {
-    ${DodamTypography.Label.Medium}
-    color: ${({ theme }) => theme.labelAlternative};
-    span {
-      color: ${({ theme }) => theme.labelNormal};
-      text-decoration: underline;
+    &:focus-within {
+      border-bottom-color: ${({ theme }) => theme.primaryNormal};
+    }
+
+    input {
+      border: none !important;
+      border-bottom: none !important;
+      outline: none;
     }
   }
 `;
@@ -49,11 +53,43 @@ export const WrapIdAndPassword = styled.div`
 export const WrapButton = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  width: 100%;
-  span {
+  align-items: center;
+  gap: 12px;
+  width: 304px;
+
+  > span {
     ${DodamTypography.Body2.Bold}
     color: ${({ theme }) => theme.primaryNormal};
-    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
+export const LoginButton = styled.button`
+  ${DodamTypography.Body1.Bold}
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 12px;
+  background: ${({ theme }) => theme.primaryNormal};
+  color: ${({ theme }) => theme.staticWhite};
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: #006acc;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    background: rgba(0, 131, 240, 0.4);
+    color: ${({ theme }) => theme.staticWhite};
+    cursor: not-allowed;
   }
 `;

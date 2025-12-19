@@ -1,5 +1,5 @@
 import * as S from "./style";
-import { DodamModal, DodamFilledButton, DodamCheckBox } from "@b1nd/dds-web";
+import { DodamModal, DodamCheckBox } from "@b1nd/dds-web";
 import { SCOPES_CONSTANTS } from "src/constants/Scopes/scopes.constants";
 import { useState, useEffect } from "react";
 import { EScopes } from "src/enum/auth/auth.enum";
@@ -100,22 +100,13 @@ const ScopesFixModal = ({
         </S.ScopesCheckboxContainer>
 
         <S.ButtonContainer>
-          <DodamFilledButton
-            text="취소"
-            size={"Medium"}
-            typography={["Body2", "Medium"]}
-            customStyle={{ height: "47px", width: "100%" }}
-            backgroundColorType="Assistive"
-            onClick={close}
-          />
-          <DodamFilledButton
-            text={modalConfig.isLoading ? "처리 중..." : modalConfig.buttonText}
-            textTheme={"staticWhite"}
-            size={"Medium"}
-            typography={["Body2", "Medium"]}
-            customStyle={{ height: "47px", width: "100%" }}
+          <S.CancelButton onClick={close}>취소</S.CancelButton>
+          <S.PrimaryButton
             onClick={modalConfig.onSubmit}
-          />
+            disabled={modalConfig.isLoading}
+          >
+            {modalConfig.isLoading ? "처리 중..." : modalConfig.buttonText}
+          </S.PrimaryButton>
         </S.ButtonContainer>
       </S.ScopesFixContainer>
     </DodamModal>

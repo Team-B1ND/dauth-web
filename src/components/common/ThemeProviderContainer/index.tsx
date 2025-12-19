@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { DodamThemeProvider, DodamGlobalStyles } from "@b1nd/dds-web";
+import { StyleSheetManager } from "styled-components";
+import isPropValid from "@emotion/is-prop-valid";
 
 type Props = { children: React.ReactNode }
 
@@ -19,10 +21,12 @@ const ThemeProviderContainer = ({ children }: Props) => {
   }, []);
 
   return (
-    <DodamThemeProvider theme={isDarkMode ? "DARK" : "LIGHT"}>
-      <DodamGlobalStyles />
-      {children}
-    </DodamThemeProvider>
+    <StyleSheetManager shouldForwardProp={isPropValid}>
+      <DodamThemeProvider theme={isDarkMode ? "DARK" : "LIGHT"}>
+        <DodamGlobalStyles />
+        {children}
+      </DodamThemeProvider>
+    </StyleSheetManager>
   );
 };
 

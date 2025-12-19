@@ -23,11 +23,12 @@ const Container = styled.div`
 
 const Content = styled.div`
   width: 25em;
-  height: 36em;
+  min-height: 520px;
   background-color: ${({ theme }) => theme.backgroundNormal};
   padding: 48px 60px;
   ${DodamShape.Large}
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
 `;

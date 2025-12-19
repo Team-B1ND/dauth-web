@@ -1,9 +1,5 @@
 import * as S from "./style";
-import {
-  DodamFilledButton,
-  DodamFilledTextField,
-  DodamModal,
-} from "@b1nd/dds-web";
+import { DodamFilledTextField, DodamModal } from "@b1nd/dds-web";
 import { useState } from "react";
 import {
   usePatchAppMutation,
@@ -72,6 +68,7 @@ const FixServiceNameModal = ({
           value={serviceName}
           placeholder="서비스명을 입력해주세요"
           onChange={(e) => setServiceName(e.target.value)}
+          onRemoveClick={() => setServiceName("")}
         />
         <DodamFilledTextField
           type="text"
@@ -79,25 +76,17 @@ const FixServiceNameModal = ({
           value={description}
           placeholder="서비스 설명을 입력해주세요"
           onChange={(e) => setDescription(e.target.value)}
+          onRemoveClick={() => setDescription("")}
         />
-        <div>
-          <DodamFilledButton
-            text="취소"
-            size={"Medium"}
-            typography={["Body2", "Medium"]}
-            customStyle={{ height: "47px", width: "100%" }}
-            backgroundColorType="Assistive"
-            onClick={close}
-          />
-          <DodamFilledButton
-            text={patchAppMutation.isPending ? "수정 중..." : "완료"}
-            textTheme={"staticWhite"}
-            size={"Medium"}
-            typography={["Body2", "Medium"]}
-            customStyle={{ height: "47px", width: "100%" }}
+        <S.ButtonContainer>
+          <S.CancelButton onClick={close}>취소</S.CancelButton>
+          <S.PrimaryButton
             onClick={handleComplete}
-          />
-        </div>
+            disabled={!serviceName.trim() || patchAppMutation.isPending}
+          >
+            {patchAppMutation.isPending ? "수정 중..." : "완료"}
+          </S.PrimaryButton>
+        </S.ButtonContainer>
       </S.ServiceNameModalContainer>
     </DodamModal>
   );

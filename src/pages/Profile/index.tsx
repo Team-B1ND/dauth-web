@@ -9,6 +9,7 @@ import ScopesFixModal from "src/components/Profile/ServiceModal/ScopesFixModal";
 import * as S from "./style";
 import {
   useGetMyAppQuery,
+  useGetUserInfoQuery,
   usePostAppMutation,
 } from "src/queries/App/app.query";
 import { useEffect } from "react";
@@ -20,6 +21,7 @@ import { ProfileSkeleton } from "src/components/common/Skeleton";
 
 const ProfilePage = () => {
   const { data, isLoading } = useGetMyAppQuery();
+  const { data: userInfo } = useGetUserInfoQuery();
   const [selectedService, setSelectedService] = useState<App | null>(null);
 
   const {
@@ -28,11 +30,11 @@ const ProfilePage = () => {
     isScopesModalOpen,
     openNewServiceModal,
     closeNewServiceModal,
-    openSelectFrameworkModal,
     closeSelectFrameworkModal,
-    openScopesModal,
     closeScopesModal,
     closeAllModals,
+    transitionToSelectFramework,
+    transitionToScopes,
   } = useProfileModals();
 
   const {
@@ -62,14 +64,12 @@ const ProfilePage = () => {
 
   const handleNextClick = (data: typeof formData) => {
     updateFormData(data);
-    closeNewServiceModal();
-    openSelectFrameworkModal();
+    transitionToSelectFramework();
   };
 
   const handleFrameworksSelect = (frameworks: number[]) => {
     updateFrameworks(frameworks);
-    closeSelectFrameworkModal();
-    openScopesModal();
+    transitionToScopes();
   };
 
   const handleScopesSelect = (scopes: any) => {
@@ -101,9 +101,9 @@ const ProfilePage = () => {
             <>
               <S.LeftColumn>
                 <ProfileCard
-                  name="박재민"
+                  name={userInfo?.data?.name || ""}
+                  profileImage={userInfo?.data?.profileImage}
                   registeredServices={data?.data?.applications?.length || 0}
-                  joinDate="2025.02.01."
                   onOpenNewServiceModal={openNewServiceModal}
                 />
               </S.LeftColumn>

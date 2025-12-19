@@ -1,9 +1,5 @@
 import * as S from "./style";
-import {
-  DodamModal,
-  DodamFilledTextField,
-  DodamFilledButton,
-} from "@b1nd/dds-web";
+import { DodamModal, DodamFilledTextField } from "@b1nd/dds-web";
 import { useState } from "react";
 import { usePatchAppOwnerMutation } from "src/queries/App/app.query";
 
@@ -41,25 +37,17 @@ const SetMasterModal = ({ isOpen, close, clientId }: SetMasterModalProps) => {
           value={masterId}
           placeholder="아이디로 설정"
           onChange={(e) => setMasterId(e.target.value)}
+          onRemoveClick={() => setMasterId("")}
         />
-        <div>
-          <DodamFilledButton
-            text="취소"
-            size={"Medium"}
-            typography={["Body2", "Medium"]}
-            customStyle={{ height: "47px" }}
-            backgroundColorType="Assistive"
-            onClick={close}
-          />
-          <DodamFilledButton
-            text={patchAppOwnerMutation.isPending ? "변경 중..." : "완료"}
-            textTheme={"staticWhite"}
-            size={"Medium"}
-            typography={["Body2", "Medium"]}
-            customStyle={{ height: "47px" }}
+        <S.ButtonContainer>
+          <S.CancelButton onClick={close}>취소</S.CancelButton>
+          <S.PrimaryButton
             onClick={handleComplete}
-          />
-        </div>
+            disabled={!masterId.trim() || patchAppOwnerMutation.isPending}
+          >
+            {patchAppOwnerMutation.isPending ? "변경 중..." : "완료"}
+          </S.PrimaryButton>
+        </S.ButtonContainer>
       </S.ModalContainer>
     </DodamModal>
   );

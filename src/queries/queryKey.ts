@@ -10,4 +10,7 @@ export const QUERY_KEY = {
     getStatsServicesCount: "/stats/services/count",
     getStatsUsersCount: "/stats/users/count",
   },
+  user: {
+    getUserInfo: "/oauth/userinfo",
+  },
 };

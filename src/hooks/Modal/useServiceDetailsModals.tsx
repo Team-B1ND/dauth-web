@@ -31,52 +31,54 @@ export const useServiceDetailsModals = ({
   redirectUrl,
   permissions,
   frameworks,
-}: UseServiceDetailsModalsParams): (JSX.Element | null)[] => {
-  const modalConfigs = useMemo(
-    () => ({
-      serviceName: modals.serviceName ? (
-        <FixServiceNameModal
-          isOpen={modals.serviceName}
-          close={() => closeModal("serviceName")}
-          clientId={clientId}
-          currentName={serviceName}
-          currentDescription={description}
-        />
-      ) : null,
-      url: modals.url ? (
-        <SetURLModal
-          isOpen={modals.url}
-          close={() => closeModal("url")}
-          clientId={clientId}
-          currentMainUrl={mainUrl}
-          currentRedirectUrl={redirectUrl}
-        />
-      ) : null,
-      scopes: modals.scopes ? (
-        <ScopesFixModal
-          isOpen={modals.scopes}
-          close={() => closeModal("scopes")}
-          clientId={clientId}
-          currentScopes={permissions}
-        />
-      ) : null,
-      owner: modals.owner ? (
-        <SetMasterModal
-          isOpen={modals.owner}
-          close={() => closeModal("owner")}
-          clientId={clientId}
-        />
-      ) : null,
-      frameworks: modals.frameworks ? (
-        <SelectFrameworkModal
-          isOpen={modals.frameworks}
-          close={() => closeModal("frameworks")}
-          isEditMode={true}
-          clientId={clientId}
-          currentFrameworks={frameworks}
-        />
-      ) : null,
-    }),
+}: UseServiceDetailsModalsParams): ReactNode => {
+  return useMemo(
+    () => (
+      <>
+        {modals.serviceName && (
+          <FixServiceNameModal
+            isOpen={modals.serviceName}
+            close={() => closeModal("serviceName")}
+            clientId={clientId}
+            currentName={serviceName}
+            currentDescription={description}
+          />
+        )}
+        {modals.url && (
+          <SetURLModal
+            isOpen={modals.url}
+            close={() => closeModal("url")}
+            clientId={clientId}
+            currentMainUrl={mainUrl}
+            currentRedirectUrl={redirectUrl}
+          />
+        )}
+        {modals.scopes && (
+          <ScopesFixModal
+            isOpen={modals.scopes}
+            close={() => closeModal("scopes")}
+            clientId={clientId}
+            currentScopes={permissions}
+          />
+        )}
+        {modals.owner && (
+          <SetMasterModal
+            isOpen={modals.owner}
+            close={() => closeModal("owner")}
+            clientId={clientId}
+          />
+        )}
+        {modals.frameworks && (
+          <SelectFrameworkModal
+            isOpen={modals.frameworks}
+            close={() => closeModal("frameworks")}
+            isEditMode={true}
+            clientId={clientId}
+            currentFrameworks={frameworks}
+          />
+        )}
+      </>
+    ),
     [
       modals,
       closeModal,
@@ -89,6 +91,4 @@ export const useServiceDetailsModals = ({
       frameworks,
     ]
   );
-
-  return Object.values(modalConfigs);
 };

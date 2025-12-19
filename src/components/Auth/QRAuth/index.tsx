@@ -34,7 +34,8 @@ const QRAuth = () => {
     if (scopes.length > 0) {
       mutate();
     }
-  }, [mutate, scopes, clientId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (data?.data?.code) {
@@ -56,7 +57,20 @@ const QRAuth = () => {
   return (
     <S.QRContainer>
       {error ? (
-        "QR 코드 생성에 실패했습니다."
+        <>
+          <img src={Logo} alt="로고" />
+          <S.PointWord>
+            도담도담 <span>계정으로</span>
+            <br />
+            <span>client에 연결하기</span>
+          </S.PointWord>
+          <S.ErrorMessage>QR 코드 생성에 실패했습니다.</S.ErrorMessage>
+          <S.GoIdLink
+            onClick={() => navigate(`/login/id${location.search}`)}
+          >
+            ID / PW로 로그인
+          </S.GoIdLink>
+        </>
       ) : !data ? (
         <QRAuthSkeleton />
       ) : (

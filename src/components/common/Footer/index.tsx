@@ -1,7 +1,19 @@
 import * as S from "./style";
 import { DodamDivider } from "@b1nd/dds-web";
 
+const FOOTER_LINKS = {
+  docs: "https://docs.b1nd.com",
+  service: "https://b1nd.com",
+  blog: "https://tech.b1nd.com",
+  dodam: "https://dodam.b1nd.com",
+  github: "https://github.com/Team-B1ND",
+};
+
 const Footer = () => {
+  const openLink = (url: string) => {
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <S.FooterContainer>
       <DodamDivider type="Small"/>
@@ -13,13 +25,13 @@ const Footer = () => {
         </S.LeftSection>
         <S.RightSection>
           <S.LinkColumn>
-            <span>DOCS</span>
-            <span>서비스</span>
-            <span>블로그</span>
+            <S.LinkItem onClick={() => openLink(FOOTER_LINKS.docs)}>DOCS</S.LinkItem>
+            <S.LinkItem onClick={() => openLink(FOOTER_LINKS.service)}>서비스</S.LinkItem>
+            <S.LinkItem onClick={() => openLink(FOOTER_LINKS.blog)}>블로그</S.LinkItem>
           </S.LinkColumn>
           <S.LinkColumn>
-            <span>도담도담</span>
-            <span>깃허브</span>
+            <S.LinkItem onClick={() => openLink(FOOTER_LINKS.dodam)}>도담도담</S.LinkItem>
+            <S.LinkItem onClick={() => openLink(FOOTER_LINKS.github)}>깃허브</S.LinkItem>
           </S.LinkColumn>
         </S.RightSection>
       </S.ContentWrapper>

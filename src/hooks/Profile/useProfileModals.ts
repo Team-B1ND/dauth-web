@@ -21,6 +21,17 @@ export const useProfileModals = () => {
   const openScopesModal = () => setIsScopesModalOpen(true);
   const closeScopesModal = () => setIsScopesModalOpen(false);
 
+  // 모달 전환 함수 (배경 깜빡임 방지)
+  const transitionToSelectFramework = () => {
+    setIsSelectFrameWorkModalOpen(true);
+    setIsNewServiceModalOpen(false);
+  };
+
+  const transitionToScopes = () => {
+    setIsScopesModalOpen(true);
+    setIsSelectFrameWorkModalOpen(false);
+  };
+
   return {
     isNewServiceModalOpen,
     isSelectFrameWorkModalOpen,
@@ -32,5 +43,7 @@ export const useProfileModals = () => {
     openScopesModal,
     closeScopesModal,
     closeAllModals,
+    transitionToSelectFramework,
+    transitionToScopes,
   };
 };

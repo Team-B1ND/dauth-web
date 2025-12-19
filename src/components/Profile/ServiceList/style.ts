@@ -55,12 +55,13 @@ export const ListItem = styled.div<{ $isHighlighted?: boolean }>`
   ${DodamShape.Medium}
   cursor: pointer;
   ${DodamTypography.Headline.Bold}
+  transition: background-color 0.2s ease;
 
   &:hover {
     background-color: ${(props) =>
       props.$isHighlighted
         ? props.theme.primaryNormal
-        : props.theme.backgroundNormal};
+        : props.theme.fillAlternative};
   }
 
   @media (max-width: 768px) {

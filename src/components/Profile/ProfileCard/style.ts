@@ -5,8 +5,8 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 24px 28px 32px;
-  background-color: ${({theme})=> theme.backgroundNormal};
+  padding: 24px 28px;
+  background-color: ${({ theme }) => theme.backgroundNormal};
   ${DodamShape.Medium}
   width: 280px;
   box-sizing: border-box;
@@ -17,10 +17,11 @@ export const Container = styled.div`
   }
 `;
 
-export const ProfileImageWrapper = styled.div`
+export const ProfileImage = styled.img`
   width: 160px;
   height: 160px;
-  ${DodamShape.ExtraLarge}
+  border-radius: 50%;
+  object-fit: cover;
   margin: 0 auto;
 
   @media (max-width: 768px) {
@@ -50,12 +51,28 @@ export const StatRow = styled.div`
   align-items: center;
   width: 100%;
 
-  > span{
+  > span {
     ${DodamTypography.Headline.Medium}
-    color: ${({theme})=> theme.labelNeutral};
+    color: ${({ theme }) => theme.labelNeutral};
   }
-  > p{
+  > p {
     ${DodamTypography.Headline.Bold}
-    color: ${({theme})=> theme.labelNormal};
+    color: ${({ theme }) => theme.labelNormal};
+  }
+`;
+
+export const RegisterButton = styled.button`
+  ${DodamTypography.Body1.Bold}
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 12px;
+  background: ${({ theme }) => theme.primaryNormal};
+  color: ${({ theme }) => theme.staticWhite};
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #006acc;
   }
 `;

@@ -51,7 +51,7 @@ const ServiceDetails = ({
         <Gear color="labelNormal" /> 서비스 상세 정보
       </h3>
 
-      <S.DetailBox>
+      <S.DetailBox onClick={() => openModal("serviceName")}>
         <S.DetailContent>
           <S.DetailColumn>
             <span>서비스명</span>
@@ -59,50 +59,46 @@ const ServiceDetails = ({
           </S.DetailColumn>
           <S.DetailColumn>
             <span>설명</span>
-            <p>{description}</p>
+            {description ? (
+              <p>{description}</p>
+            ) : (
+              <S.EmptyText>설명이 없습니다</S.EmptyText>
+            )}
           </S.DetailColumn>
         </S.DetailContent>
-        <div onClick={() => openModal("serviceName")}>
-          <ChevronRight color={"lineNormal"} />
-        </div>
+        <ChevronRight color={"lineNormal"} />
       </S.DetailBox>
 
       <S.DetailBoxRow>
-        <S.DetailBox>
+        <S.DetailBox onClick={() => openModal("url")}>
           <S.DetailContent>
             <S.DetailColumn>
               <span>메인 URL</span>
               <p>{mainUrl}</p>
             </S.DetailColumn>
           </S.DetailContent>
-          <div onClick={() => openModal("url")}>
-            <ChevronRight color={"lineNormal"} />
-          </div>
+          <ChevronRight color={"lineNormal"} />
         </S.DetailBox>
 
-        <S.DetailBox>
+        <S.DetailBox onClick={() => openModal("url")}>
           <S.DetailContent>
             <S.DetailColumn>
               <span>리다이렉트 URL</span>
               <p>{redirectUrl}</p>
             </S.DetailColumn>
           </S.DetailContent>
-          <div onClick={() => openModal("url")}>
-            <ChevronRight color={"lineNormal"} />
-          </div>
+          <ChevronRight color={"lineNormal"} />
         </S.DetailBox>
       </S.DetailBoxRow>
 
-      <S.DetailBox>
+      <S.DetailBox onClick={() => openModal("scopes")}>
         <S.DetailContent>
           <S.DetailColumn>
             <span>권한</span>
             <p>{permissionsText}</p>
           </S.DetailColumn>
         </S.DetailContent>
-        <div onClick={() => openModal("scopes")}>
-          <ChevronRight color={"lineNormal"} />
-        </div>
+        <ChevronRight color={"lineNormal"} />
       </S.DetailBox>
 
       <S.DetailBoxRow>
@@ -115,37 +111,37 @@ const ServiceDetails = ({
           </S.DetailContent>
         </S.DetailBox>
 
-        <S.DetailBox>
+        <S.DetailBox onClick={() => openModal("owner")}>
           <S.DetailContent>
             <S.DetailColumn>
               <span>서비스 주인</span>
               <p>{owner}</p>
             </S.DetailColumn>
           </S.DetailContent>
-          <div onClick={() => openModal("owner")}>
-            <ChevronRight color={"lineNormal"} />
-          </div>
+          <ChevronRight color={"lineNormal"} />
         </S.DetailBox>
       </S.DetailBoxRow>
 
-      <S.DetailBox>
+      <S.DetailBox onClick={() => openModal("frameworks")}>
         <S.DetailContent>
           <S.DetailColumn>
             <span>사용 프레임워크</span>
-            <S.WrapFrameworkTag>
-              {frameworks?.map((framework) => (
-                <FrameworkTag
-                  key={framework.id}
-                  name={framework.name}
-                  color={framework.color}
-                />
-              ))}
-            </S.WrapFrameworkTag>
+            {frameworks && frameworks.length > 0 ? (
+              <S.WrapFrameworkTag>
+                {frameworks.map((framework) => (
+                  <FrameworkTag
+                    key={framework.id}
+                    name={framework.name}
+                    color={framework.color}
+                  />
+                ))}
+              </S.WrapFrameworkTag>
+            ) : (
+              <S.EmptyText>프레임워크가 없습니다</S.EmptyText>
+            )}
           </S.DetailColumn>
         </S.DetailContent>
-        <div onClick={() => openModal("frameworks")}>
-          <ChevronRight color={"lineNormal"} />
-        </div>
+        <ChevronRight color={"lineNormal"} />
       </S.DetailBox>
 
       {modalsComponents}

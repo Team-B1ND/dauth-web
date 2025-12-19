@@ -1,6 +1,6 @@
 import * as S from "./style";
 import Logo from "src/assets/logo.svg";
-import { DodamTextField, DodamFilledButton } from "@b1nd/dds-web";
+import { DodamTextField } from "@b1nd/dds-web";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { usePostAuthIdLoginMutation } from "src/queries/Auth/auth.query";
@@ -59,32 +59,30 @@ const LogIn = () => {
             onChange={(e) => {
               setId(e.target.value);
             }}
-            customStyle={{ minWidth: "304px" }}
+            onRemoveClick={() => setId("")}
+            width={304}
           />
-          <div>
-            <DodamTextField
-              id="password"
-              name="password"
-              type="password"
-              value={password}
-              label="비밀번호"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              customStyle={{ padding: 0 }}
-            />
-          </div>
+          <DodamTextField
+            id="password"
+            name="password"
+            type="password"
+            value={password}
+            label="비밀번호"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            onRemoveClick={() => setPassword("")}
+            width={304}
+          />
         </S.WrapIdAndPassword>
 
         <S.WrapButton>
-          <DodamFilledButton
-            text={isPending ? "로그인 중..." : "로그인"}
-            textTheme={"staticWhite"}
-            size={"Medium"}
-            typography={["Body2", "Medium"]}
-            customStyle={{ height: "48px", width: "100%" }}
+          <S.LoginButton
             onClick={handleLogin}
-          />
+            disabled={!id || !password || isPending}
+          >
+            {isPending ? "로그인 중..." : "로그인"}
+          </S.LoginButton>
 
           <span onClick={() => navigate(`/login/qr${location.search}`)}>
             QR로 간편 로그인

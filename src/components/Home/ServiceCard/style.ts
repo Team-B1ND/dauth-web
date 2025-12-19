@@ -11,6 +11,7 @@ export const Card = styled.div`
   flex: 1;
   min-height: 166px;
   box-sizing: border-box;
+  cursor: pointer;
 
   @media (max-width: 768px) {
     min-height: auto;

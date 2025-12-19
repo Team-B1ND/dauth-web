@@ -108,3 +108,13 @@ export const usePatchAppMutation = (onSuccess?: () => void) => {
     },
   });
 };
+
+export const useGetUserInfoQuery = (enabled: boolean = true) => {
+  return useQuery({
+    queryKey: [QUERY_KEY.user.getUserInfo],
+    queryFn: () => appApi.getUserInfo(),
+    enabled,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 15,
+  });
+};

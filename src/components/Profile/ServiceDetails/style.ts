@@ -29,11 +29,20 @@ export const DetailBox = styled.div`
   ${DodamShape.Medium}
   min-height: 96px;
   box-sizing: border-box;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.fillAlternative};
+  }
+
+  > svg {
+    flex-shrink: 0;
+  }
 
   @media (max-width: 768px) {
     min-height: auto;
-    flex-direction: column;
-    gap: 12px;
+    padding: 12px 16px;
   }
 `;
 
@@ -97,4 +106,14 @@ export const WrapFrameworkTag = styled.div`
   flex-wrap: wrap;
   gap: 8px;
   padding: 4px 0;
+`;
+
+export const EmptyText = styled.p`
+  ${DodamTypography.Heading2.Medium}
+  color: ${({ theme }) => theme.labelAssistive};
+  font-style: italic;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;

@@ -15,8 +15,12 @@ const ServiceCard = ({
   date,
   author,
 } : ServiceCardProps) => {
+  const handleClick = () => {
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   return (
-    <S.Card>
+    <S.Card onClick={handleClick}>
       <h1>{title}</h1>
       <S.CardUrl>{url}</S.CardUrl>
       <S.CardDescription>{description}</S.CardDescription>

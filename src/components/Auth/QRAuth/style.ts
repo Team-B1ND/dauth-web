@@ -6,16 +6,19 @@ export const QRContainer = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
+  gap: 24px;
 
-  img {
+  > img {
     width: 108px;
     height: 108px;
-    margin-bottom: 24px;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
   }
 
-  >p{
-      ${DodamTypography.Headline.Medium}
-      color: ${({theme})=> theme.labelNormal};
+  > p {
+    ${DodamTypography.Headline.Medium}
+    color: ${({ theme }) => theme.labelNormal};
   }
 `;
 
@@ -27,31 +30,39 @@ export const PointWord = styled.div`
     ${DodamTypography.Title2.Medium}
     color: ${({ theme }) => theme.labelNormal};
   }
-
-  margin-bottom: 24px;
 `;
 
-
 export const QRNotice = styled.div`
-  color: ${({ theme }) => theme.labelNormal};
-  margin-top: 34px;
   ${DodamTypography.Headline.Medium}
+  color: ${({ theme }) => theme.labelNormal};
 
   span {
-    color: ${({ theme }) => theme.primaryNormal};
     ${DodamTypography.Headline.Bold}
+    color: ${({ theme }) => theme.primaryNormal};
   }
 `;
 
 export const LoginLink = styled.div`
-  color: ${({ theme }) => theme.primaryNormal};
   ${DodamTypography.Body2.Bold}
-  margin-top: 12px;
-  text-decoration: underline;
+  color: ${({ theme }) => theme.primaryNormal};
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
-export const GoIdLink = styled.div`
+export const GoIdLink = styled.span`
   ${DodamTypography.Body2.Bold}
-  color: ${({theme})=> theme.primaryNormal};
-  text-decoration: underline;
-`
+  color: ${({ theme }) => theme.primaryNormal};
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+export const ErrorMessage = styled.p`
+  ${DodamTypography.Headline.Medium}
+  color: ${({ theme }) => theme.statusNegative};
+`;

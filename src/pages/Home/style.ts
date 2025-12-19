@@ -13,7 +13,7 @@ export const MainContent = styled.main`
   flex-direction: column;
   gap: 24px;
   flex: 1;
-  padding: 24px 40px;
+  padding: 24px max(40px, calc((100% - 1360px) / 2));
   background-color: ${({theme})=> theme.backgroundNeutral};
   box-sizing: border-box;
 

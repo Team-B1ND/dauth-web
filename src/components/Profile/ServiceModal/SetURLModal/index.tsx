@@ -1,5 +1,4 @@
-import { DodamModal } from "@b1nd/dds-web";
-import { DodamFilledTextField, DodamFilledButton } from "@b1nd/dds-web";
+import { DodamModal, DodamFilledTextField } from "@b1nd/dds-web";
 import * as S from "./style";
 import { useState } from "react";
 import {
@@ -78,6 +77,7 @@ const SetURLModal = ({
           value={mainUrl}
           placeholder="https://example.com"
           onChange={(e) => setMainUrl(e.target.value)}
+          onRemoveClick={() => setMainUrl("")}
         />
         <span>서비스의 메인 페이지 URL을 입력해 주세요.</span>
         <DodamFilledTextField
@@ -86,26 +86,18 @@ const SetURLModal = ({
           value={redirectUrl}
           placeholder="https://example.com/callback"
           onChange={(e) => setRedirectUrl(e.target.value)}
+          onRemoveClick={() => setRedirectUrl("")}
         />
         <span>로그인 이후 리다이렉트 될 페이지의 URL을 입력해 주세요.</span>
-        <div>
-          <DodamFilledButton
-            text="취소"
-            size={"Medium"}
-            typography={["Body2", "Medium"]}
-            customStyle={{ height: "47px" }}
-            backgroundColorType="Assistive"
-            onClick={close}
-          />
-          <DodamFilledButton
-            text={patchAppMutation.isPending ? "수정 중..." : "완료"}
-            textTheme={"staticWhite"}
-            size={"Medium"}
-            typography={["Body2", "Medium"]}
-            customStyle={{ height: "47px" }}
+        <S.ButtonContainer>
+          <S.CancelButton onClick={close}>취소</S.CancelButton>
+          <S.PrimaryButton
             onClick={handleComplete}
-          />
-        </div>
+            disabled={!mainUrl.trim() || !redirectUrl.trim() || patchAppMutation.isPending}
+          >
+            {patchAppMutation.isPending ? "수정 중..." : "완료"}
+          </S.PrimaryButton>
+        </S.ButtonContainer>
       </S.ModalContainer>
     </DodamModal>
   );

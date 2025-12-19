@@ -6,7 +6,7 @@ export const FooterContainer = styled.footer`
   flex-direction: column;
   gap: 40px;
   width: 100%;
-  padding: 40px 40px 72px;
+  padding: 40px max(40px, calc((100% - 1360px) / 2)) 72px;
   background-color: ${({ theme }) => theme.backgroundNeutral};
   box-sizing: border-box;
 
@@ -64,8 +64,14 @@ export const LinkColumn = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  > span {
-    ${DodamTypography.Caption2.Bold}
-    color: ${({ theme }) => theme.labelNeutral};
+`;
+
+export const LinkItem = styled.span`
+  ${DodamTypography.Caption2.Bold}
+  color: ${({ theme }) => theme.labelNeutral};
+  cursor: pointer;
+
+  &:hover {
+    color: ${({ theme }) => theme.primaryNormal};
   }
 `;

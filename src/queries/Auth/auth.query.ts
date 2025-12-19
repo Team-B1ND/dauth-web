@@ -13,7 +13,6 @@ export const usePostAuthQRMutation = (params: PostQRParams) => {
   const mutation = useMutation({
     mutationFn: () => authApi.postAuthQR(params),
     onSuccess: () => {
-      B1ndToast.showSuccess("QR 코드가 생성되었습니다.");
       queryClient.invalidateQueries({ queryKey: ["qr", params] });
     },
     onError: () => {
