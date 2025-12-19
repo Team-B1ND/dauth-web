@@ -17,7 +17,7 @@ export const useGetFrameworksQuery = () => {
   });
 };
 
-export const usePostAppMutation = () => {
+export const usePostAppMutation = (onSuccess?: () => void) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -27,8 +27,9 @@ export const usePostAppMutation = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.app.getMyApp],
       });
+      onSuccess?.();
     },
-    onError: (error) => {
+    onError: () => {
       B1ndToast.showError("앱 등록에 실패했습니다. 다시 시도해주세요.");
     },
   });
@@ -70,7 +71,7 @@ export const useGetStatsUsersCountQuery = () => {
   });
 };
 
-export const usePatchAppOwnerMutation = () => {
+export const usePatchAppOwnerMutation = (onSuccess?: () => void) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -80,14 +81,17 @@ export const usePatchAppOwnerMutation = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.app.getMyApp],
       });
+      onSuccess?.();
     },
-    onError: (error) => {
-      B1ndToast.showError("서비스 주인 변경에 실패했습니다. 다시 시도해주세요.");    
+    onError: () => {
+      B1ndToast.showError(
+        "서비스 주인 변경에 실패했습니다. 다시 시도해주세요."
+      );
     },
   });
 };
 
-export const usePatchAppMutation = () => {
+export const usePatchAppMutation = (onSuccess?: () => void) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -97,8 +101,9 @@ export const usePatchAppMutation = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.app.getMyApp],
       });
+      onSuccess?.();
     },
-    onError: (error) => {
+    onError: () => {
       B1ndToast.showError("앱 수정에 실패했습니다. 다시 시도해주세요.");
     },
   });

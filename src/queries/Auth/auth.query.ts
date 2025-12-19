@@ -5,39 +5,35 @@ import {
   authQRCheckParams,
   PostQRParams,
   AuthIdLoginParams,
-  OAuthTokenParams,
 } from "src/api/Auth/auth.params";
+import { B1ndToast } from "@b1nd/b1nd-toastify";
 
 export const usePostAuthQRMutation = (params: PostQRParams) => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: () => authApi.postAuthQR(params),
     onSuccess: () => {
+      B1ndToast.showSuccess("QR 코드가 생성되었습니다.");
       queryClient.invalidateQueries({ queryKey: ["qr", params] });
+    },
+    onError: () => {
+      B1ndToast.showError("QR 코드 생성에 실패했습니다. 다시 시도해주세요.");
     },
   });
 
   return mutation;
 };
 
-export const usePostAuthIdLoginMutation = () => {
+export const usePostAuthIdLoginMutation = (onSuccess?: (data: any) => void) => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (params: AuthIdLoginParams) => authApi.postAuthIdLogin(params),
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["id-login"] });
+      onSuccess?.(data);
     },
-  });
-
-  return mutation;
-};
-
-export const usePostOAuthTokenMutation = () => {
-  const queryClient = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: (params: OAuthTokenParams) => authApi.postOAuthToken(params),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["oauth-token"] });
+    onError: () => {
+      B1ndToast.showError("로그인에 실패했습니다. 다시 시도해주세요.");
     },
   });
 
