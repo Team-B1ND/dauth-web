@@ -19,11 +19,11 @@ export interface AuthIdLoginResponse extends Response {
   };
 }
 
-export interface OAuthTokenResponse extends Response {
-  data: {
-    accessToken: string;
-    refreshToken: string;
-    idToken: string;
-    tokenType: string;
-  };
+export interface OAuthTokenResponse {
+  access_token: string;
+  refresh_token: string;
+  id_token: string;
+  token_type: string;
+  expires_in: number;
+  scope: string;
 }

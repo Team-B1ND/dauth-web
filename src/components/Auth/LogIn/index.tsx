@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { usePostAuthIdLoginMutation } from "src/queries/Auth/auth.query";
 import { useAuthParams } from "src/hooks/Auth/useAuthParams";
 import { useAuthTokenFlow } from "src/hooks/Auth/useAuthTokenFlow";
+import { useGetAppNameQuery } from "src/queries/App/app.query";
 
 const LogIn = () => {
   const [id, setId] = useState<string>("");
@@ -16,6 +17,8 @@ const LogIn = () => {
   const { clientId, redirectUrl, scopes, state } =
     useAuthParams();
   const { handleAuthCode } = useAuthTokenFlow();
+  const { data: appNameData } = useGetAppNameQuery(clientId);
+  const appName = appNameData?.data || "서비스";
   const { mutate, isPending } = usePostAuthIdLoginMutation((data) => {
     handleAuthCode(data.data.code, {
       redirectUrl,
@@ -46,7 +49,7 @@ const LogIn = () => {
         <S.PointWord>
           도담도담 <span>계정으로</span>
           <br />
-          <span>client에 연결하기</span>
+          <span><strong>{appName}</strong>에 연결하기</span>
         </S.PointWord>
 
         <S.WrapIdAndPassword>

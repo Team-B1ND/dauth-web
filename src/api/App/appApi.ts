@@ -1,5 +1,6 @@
 import { dodamAxios } from "src/libs/Axios/dodamAxios";
 import {
+  AppNameResponse,
   AppsResponse,
   FrameWorksResponse,
   MyAppResponse,
@@ -59,6 +60,13 @@ class AppApi {
 
   public async getUserInfo(): Promise<UserInfoResponse>{
     const { data } = await dodamAxios.get<UserInfoResponse>("/oauth/userinfo");
+    return data;
+  }
+
+  public async getAppName(clientId: string): Promise<AppNameResponse> {
+    const { data } = await dodamAxios.get<AppNameResponse>("/app/name", {
+      params: { clientId },
+    });
     return data;
   }
 }

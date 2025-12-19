@@ -19,6 +19,8 @@ export interface AuthIdLoginParams {
 }
 
 export interface OAuthTokenParams {
-  code: string;
-  clientSecret: string;
+  grantType: "authorization_code" | "refresh_token";
+  clientId: string;
+  code?: string;
+  refreshToken?: string;
 }

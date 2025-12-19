@@ -118,3 +118,13 @@ export const useGetUserInfoQuery = (enabled: boolean = true) => {
     gcTime: 1000 * 60 * 15,
   });
 };
+
+export const useGetAppNameQuery = (clientId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEY.app.getAppName, clientId],
+    queryFn: () => appApi.getAppName(clientId),
+    enabled: !!clientId,
+    staleTime: 1000 * 60 * 10,
+    gcTime: 1000 * 60 * 30,
+  });
+};

@@ -7,6 +7,7 @@ export const QUERY_KEY = {
     postApp: "/app",
     getMyApp: "/app/my",
     getApp: "/app",
+    getAppName: "/app/name",
     getStatsServicesCount: "/stats/services/count",
     getStatsUsersCount: "/stats/users/count",
   },

@@ -53,3 +53,7 @@ export interface UserInfoResponse extends Response {
     phone: string;
   };
 }
+
+export interface AppNameResponse extends Response {
+  data: string;
+}

@@ -12,12 +12,15 @@ import { authQRCheckParams } from "src/api/Auth/auth.params";
 import { useAuthParams } from "src/hooks/Auth/useAuthParams";
 import { useAuthTokenFlow } from "src/hooks/Auth/useAuthTokenFlow";
 import { QRAuthSkeleton } from "src/components/common/Skeleton";
+import { useGetAppNameQuery } from "src/queries/App/app.query";
 
 const QRAuth = () => {
   const theme = useTheme();
-  const { clientId, clientSecret, redirectUrl, state, scopes } =
+  const { clientId, redirectUrl, state, scopes } =
     useAuthParams();
   const { handleAuthCode } = useAuthTokenFlow();
+  const { data: appNameData } = useGetAppNameQuery(clientId);
+  const appName = appNameData?.data || "서비스";
   const navigate = useNavigate();
   const location = useLocation();
   const [qrCheckParams, setQrCheckParams] = useState<authQRCheckParams | null>(
@@ -62,7 +65,7 @@ const QRAuth = () => {
           <S.PointWord>
             도담도담 <span>계정으로</span>
             <br />
-            <span>client에 연결하기</span>
+            <span><strong>{appName}</strong>에 연결하기</span>
           </S.PointWord>
           <S.ErrorMessage>QR 코드 생성에 실패했습니다.</S.ErrorMessage>
           <S.GoIdLink
@@ -84,7 +87,7 @@ const QRAuth = () => {
                 <S.PointWord>
                   도담도담 <span>계정으로</span>
                   <br />
-                  <span>client에 연결하기</span>
+                  <span><strong>{appName}</strong>에 연결하기</span>
                 </S.PointWord>
 
                 <QRCode

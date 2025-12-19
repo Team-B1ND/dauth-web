@@ -24,6 +24,11 @@ export const PointWord = styled.div`
     ${DodamTypography.Title2.Medium}
     color: ${({ theme }) => theme.labelNormal};
   }
+
+  strong {
+    ${DodamTypography.Title2.Bold}
+    color: ${({ theme }) => theme.primaryNormal};
+  }
 `;
 
 export const WrapIdAndPassword = styled.div`

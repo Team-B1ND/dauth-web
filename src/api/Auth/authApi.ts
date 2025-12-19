@@ -41,7 +41,7 @@ class AuthApi {
     params: OAuthTokenParams
   ): Promise<OAuthTokenResponse> {
     const { data } = await dodamAxios.post<OAuthTokenResponse>(
-      "/oauth/token",
+      "/oauth/token/internal",
       params
     );
     return data;

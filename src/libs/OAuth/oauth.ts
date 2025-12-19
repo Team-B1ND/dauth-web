@@ -7,7 +7,6 @@ import authApi from "src/api/Auth/authApi";
 
 const oauthConfig = {
   CLIENT_ID: import.meta.env.VITE_OAUTH_CLIENT_ID,
-  CLIENT_SECRET: import.meta.env.VITE_OAUTH_CLIENT_SECRET,
   REDIRECT_URI: import.meta.env.VITE_OAUTH_REDIRECT_URI,
   AUTHORIZE_URL: import.meta.env.VITE_OAUTH_AUTHORIZE_URL,
   SCOPES: (import.meta.env.VITE_OAUTH_SCOPES || "").split(","),
@@ -28,18 +27,44 @@ class OAuth {
   public async exchangeCodeForToken(code: string): Promise<boolean> {
     try {
       const response = await authApi.postOAuthToken({
+        grantType: "authorization_code",
+        clientId: oauthConfig.CLIENT_ID,
         code,
-        clientSecret: oauthConfig.CLIENT_SECRET,
       });
 
-      if (response.data) {
-        token.setToken(ACCESS_TOKEN_KEY, response.data.accessToken);
-        token.setToken(REFRESH_TOKEN_KEY, response.data.refreshToken);
+      if (response.access_token) {
+        token.setToken(ACCESS_TOKEN_KEY, response.access_token);
+        token.setToken(REFRESH_TOKEN_KEY, response.refresh_token);
         return true;
       }
       return false;
     } catch (error) {
       console.error("Token exchange failed:", error);
+      return false;
+    }
+  }
+
+  public async refreshAccessToken(): Promise<boolean> {
+    try {
+      const refreshToken = token.getToken(REFRESH_TOKEN_KEY);
+      if (!refreshToken) {
+        return false;
+      }
+
+      const response = await authApi.postOAuthToken({
+        grantType: "refresh_token",
+        clientId: oauthConfig.CLIENT_ID,
+        refreshToken,
+      });
+
+      if (response.access_token) {
+        token.setToken(ACCESS_TOKEN_KEY, response.access_token);
+        token.setToken(REFRESH_TOKEN_KEY, response.refresh_token);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error("Token refresh failed:", error);
       return false;
     }
   }
