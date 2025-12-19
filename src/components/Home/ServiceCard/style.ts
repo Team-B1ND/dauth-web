@@ -47,7 +47,9 @@ export const CardFooter = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  span{
+  margin-top: auto;
+
+  span {
     ${DodamTypography.Caption1.Medium}
     color: ${({ theme }) => theme.labelAlternative};
   }
