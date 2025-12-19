@@ -7,6 +7,3 @@ export enum EScopes {
   READ_DORMITORY = "READ_DORMITORY",
   WRITE_DORMITORY = "WRITE_DORMITORY",
 }
-
-
-

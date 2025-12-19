@@ -13,7 +13,7 @@ const LogIn = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { clientId, clientSecret, redirectUrl, scopes, state } =
+  const { clientId, redirectUrl, scopes, state } =
     useAuthParams();
   const { handleAuthCode } = useAuthTokenFlow();
   const { mutate, isPending } = usePostAuthIdLoginMutation((data) => {

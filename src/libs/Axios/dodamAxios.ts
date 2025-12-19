@@ -1,5 +1,4 @@
 import axios from "axios";
-import config from "src/config/config.json";
 import {
   ACCESS_TOKEN_KEY,
   REQUEST_TOKEN_KEY,
@@ -8,7 +7,7 @@ import cookies from "../Cookie/cookie";
 import { dodamAxiosErrorInterceptor } from "./interceptors";
 
 export const dodamAxios = axios.create({
-  baseURL: config.SERVER,
+  baseURL: import.meta.env.VITE_SERVER_URL,
   headers: {
     "Access-Control-Allow-Origin": "*",
   },

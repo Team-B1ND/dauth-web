@@ -1,4 +1,3 @@
-import config from "src/config/config.json";
 import token from "../Token/token";
 import {
   ACCESS_TOKEN_KEY,
@@ -6,7 +5,13 @@ import {
 } from "src/constants/Token/token.constants";
 import authApi from "src/api/Auth/authApi";
 
-const oauthConfig = config.OAUTH;
+const oauthConfig = {
+  CLIENT_ID: import.meta.env.VITE_OAUTH_CLIENT_ID,
+  CLIENT_SECRET: import.meta.env.VITE_OAUTH_CLIENT_SECRET,
+  REDIRECT_URI: import.meta.env.VITE_OAUTH_REDIRECT_URI,
+  AUTHORIZE_URL: import.meta.env.VITE_OAUTH_AUTHORIZE_URL,
+  SCOPES: (import.meta.env.VITE_OAUTH_SCOPES || "").split(","),
+};
 
 class OAuth {
   public startOAuthLogin(): void {
