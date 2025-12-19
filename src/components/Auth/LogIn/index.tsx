@@ -1,0 +1,109 @@
+import * as S from "./style";
+import Logo from "src/assets/logo.svg";
+import { DodamTextField, DodamFilledButton } from "@b1nd/dds-web";
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { usePostAuthIdLoginMutation } from "src/queries/Auth/auth.query";
+import { useAuthParams } from "src/hooks/Auth/useAuthParams";
+import { useAuthTokenFlow } from "src/hooks/Auth/useAuthTokenFlow";
+
+const LogIn = () => {
+  const [id, setId] = useState<string>("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const { clientId, clientSecret, redirectUrl, scopes, state } = useAuthParams();
+  const { handleAuthCode, isTokenPending } = useAuthTokenFlow();
+  const { mutate, isPending } = usePostAuthIdLoginMutation();
+
+  const handleLogin = async () => {
+    if (!id || !password) {
+      alert("아이디와 비밀번호를 입력해주세요.");
+      return;
+    }
+
+    mutate(
+      {
+        id,
+        password,
+        clientId,
+        redirectUrl,
+        scopes,
+      },
+      {
+        onSuccess: (data) => {
+          handleAuthCode(data.data.code, {
+            clientSecret,
+            redirectUrl,
+            state,
+          });
+        },
+        onError: () => {
+          alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
+        },
+      }
+    );
+  };
+
+  return (
+    <>
+      <S.LogInContainer>
+        <img src={Logo} alt="로고" />
+
+        <S.PointWord>
+          도담도담 <span>계정으로</span>
+          <br />
+          <span>client에 연결하기</span>
+        </S.PointWord>
+
+        <S.WrapIdAndPassword>
+          <DodamTextField
+            id="id"
+            name="id"
+            type="text"
+            value={id}
+            label="아이디"
+            onChange={(e) => {
+              setId(e.target.value);
+            }}
+            customStyle={{ minWidth: "304px" }}
+          />
+          <div>
+            <DodamTextField
+              id="password"
+              name="password"
+              type="password"
+              value={password}
+              label="비밀번호"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              customStyle={{ padding: 0 }}
+            />
+            <p>
+              비밀번호를 잊으셨나요? <span>비밀번호 재설정</span>
+            </p>
+          </div>
+        </S.WrapIdAndPassword>
+
+        <S.WrapButton>
+          <DodamFilledButton
+            text={isPending || isTokenPending ? "로그인 중..." : "로그인"}
+            textTheme={"staticWhite"}
+            size={"Medium"}
+            typography={["Body2", "Medium"]}
+            customStyle={{ height: "48px", width: "100%" }}
+            onClick={handleLogin}
+          />
+
+          <span onClick={() => navigate(`/login/qr${location.search}`)}>
+            QR로 간편 로그인
+          </span>
+        </S.WrapButton>
+      </S.LogInContainer>
+    </>
+  );
+};
+
+export default LogIn;
