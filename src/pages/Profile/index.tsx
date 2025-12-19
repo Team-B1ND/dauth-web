@@ -11,29 +11,44 @@ import {
   useGetMyAppQuery,
   usePostAppMutation,
 } from "src/queries/App/app.query";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import { App } from "src/types/App/app.type";
-import { EScopes } from "src/enum/auth/auth.enum";
+import { useProfileModals } from "src/hooks/Profile/useProfileModals";
+import { useProfileServiceForm } from "src/hooks/Profile/useProfileServiceForm";
+import { ProfileSkeleton } from "src/components/common/Skeleton";
 
 const ProfilePage = () => {
-  const { data } = useGetMyAppQuery();
+  const { data, isLoading } = useGetMyAppQuery();
   const [selectedService, setSelectedService] = useState<App | null>(null);
-  const [isNewServiceModalOpen, setIsNewServiceModalOpen] = useState(false);
-  const [isSelectFrameWorkModalOpen, setIsSelectFrameWorkModalOpen] =
-    useState(false);
-  const [isScopesModalOpen, setIsScopesModalOpen] = useState(false);
 
-  const [formData, setFormData] = useState({
-    serviceName: "",
-    serviceDescription: "",
-    mainUrl: "",
-    redirectUrl: "",
-    isPublic: false,
+  const {
+    isNewServiceModalOpen,
+    isSelectFrameWorkModalOpen,
+    isScopesModalOpen,
+    openNewServiceModal,
+    closeNewServiceModal,
+    openSelectFrameworkModal,
+    closeSelectFrameworkModal,
+    openScopesModal,
+    closeScopesModal,
+    closeAllModals,
+  } = useProfileModals();
+
+  const {
+    formData,
+    selectedFrameworks,
+    selectedScopes,
+    updateFormData,
+    updateFrameworks,
+    updateScopes,
+    resetForm,
+  } = useProfileServiceForm();
+
+  const postAppMutation = usePostAppMutation(() => {
+    closeAllModals();
+    resetForm();
   });
-  const [selectedFrameworks, setSelectedFrameworks] = useState<number[]>([]);
-  const [selectedScopes, setSelectedScopes] = useState<EScopes[]>([]);
-
-  const postAppMutation = usePostAppMutation();
 
   useEffect(() => {
     if (
@@ -46,23 +61,23 @@ const ProfilePage = () => {
   }, [data, selectedService]);
 
   const handleNextClick = (data: typeof formData) => {
-    setFormData(data);
-    setIsNewServiceModalOpen(false);
-    setIsSelectFrameWorkModalOpen(true);
+    updateFormData(data);
+    closeNewServiceModal();
+    openSelectFrameworkModal();
   };
 
   const handleFrameworksSelect = (frameworks: number[]) => {
-    setSelectedFrameworks(frameworks);
-    setIsSelectFrameWorkModalOpen(false);
-    setIsScopesModalOpen(true);
+    updateFrameworks(frameworks);
+    closeSelectFrameworkModal();
+    openScopesModal();
   };
 
-  const handleScopesSelect = (scopes: EScopes[]) => {
-    setSelectedScopes(scopes);
+  const handleScopesSelect = (scopes: any) => {
+    updateScopes(scopes);
     submitService(selectedFrameworks, scopes);
   };
 
-  const submitService = async (frameworks: number[], scopes: EScopes[]) => {
+  const submitService = (frameworks: number[], scopes: any) => {
     const payload = {
       name: formData.serviceName,
       url: formData.mainUrl,
@@ -72,27 +87,7 @@ const ProfilePage = () => {
       frameworks: frameworks,
       scopes: scopes,
     };
-
-    try {
-      await postAppMutation.mutateAsync(payload);
-      setIsSelectFrameWorkModalOpen(false);
-      setIsNewServiceModalOpen(false);
-      resetModals();
-    } catch (error) {
-      console.error("서비스 등록 실패:", error);
-    }
-  };
-
-  const resetModals = () => {
-    setFormData({
-      serviceName: "",
-      serviceDescription: "",
-      mainUrl: "",
-      redirectUrl: "",
-      isPublic: false,
-    });
-    setSelectedFrameworks([]);
-    setSelectedScopes([]);
+    postAppMutation.mutate(payload);
   };
 
   return (
@@ -100,61 +95,66 @@ const ProfilePage = () => {
       <Header />
       <S.MainContent>
         <S.ContentWrapper>
-          <S.LeftColumn>
-            <ProfileCard
-              name="박재민"
-              registeredServices={data?.data?.applications?.length || 0}
-              joinDate="2025.02.01."
-              onOpenNewServiceModal={() => setIsNewServiceModalOpen(true)}
-            />
-          </S.LeftColumn>
+          {isLoading ? (
+            <ProfileSkeleton />
+          ) : (
+            <>
+              <S.LeftColumn>
+                <ProfileCard
+                  name="박재민"
+                  registeredServices={data?.data?.applications?.length || 0}
+                  joinDate="2025.02.01."
+                  onOpenNewServiceModal={openNewServiceModal}
+                />
+              </S.LeftColumn>
 
-          <S.MiddleColumn>
-            <ServiceList onSelectService={setSelectedService} />
-          </S.MiddleColumn>
+              <S.MiddleColumn>
+                <ServiceList onSelectService={setSelectedService} />
+              </S.MiddleColumn>
 
-          <S.RightColumn>
-            {selectedService ? (
-              <ServiceDetails
-                serviceName={selectedService.name}
-                description={selectedService.description}
-                mainUrl={selectedService.url}
-                redirectUrl={selectedService.redirectUrl}
-                permissions={selectedService.scopes}
-                registrationDate={selectedService.createdAt}
-                owner={selectedService.ownerId}
-                clientId={selectedService.clientId}
-                frameworks={selectedService.frameworks}
-              />
-            ) : (
-              <div style={{ padding: "20px", textAlign: "center" }}>
-                서비스를 선택해주세요.
-              </div>
-            )}
-          </S.RightColumn>
+              <S.RightColumn>
+                {selectedService ? (
+                  <ServiceDetails
+                    serviceName={selectedService.name}
+                    description={selectedService.description}
+                    mainUrl={selectedService.url}
+                    redirectUrl={selectedService.redirectUrl}
+                    permissions={selectedService.scopes}
+                    registrationDate={selectedService.createdAt}
+                    owner={selectedService.ownerId}
+                    clientId={selectedService.clientId}
+                    frameworks={selectedService.frameworks}
+                  />
+                ) : (
+                  <div style={{ padding: "20px", textAlign: "center" }}>
+                    서비스를 선택해주세요.
+                  </div>
+                )}
+              </S.RightColumn>
+            </>
+          )}
         </S.ContentWrapper>
       </S.MainContent>
 
       {isNewServiceModalOpen && (
         <NewServiceModal
           isOpen={isNewServiceModalOpen}
-          close={() => setIsNewServiceModalOpen(false)}
+          close={closeNewServiceModal}
           onNext={handleNextClick}
         />
       )}
       {isSelectFrameWorkModalOpen && (
         <SelectFrameworkModal
           isOpen={isSelectFrameWorkModalOpen}
-          close={() => setIsSelectFrameWorkModalOpen(false)}
+          close={closeSelectFrameworkModal}
           onComplete={handleFrameworksSelect}
-          isSubmitting={postAppMutation.isPending}
         />
       )}
 
       {isScopesModalOpen && (
         <ScopesFixModal
           isOpen={isScopesModalOpen}
-          close={() => setIsScopesModalOpen(false)}
+          close={closeScopesModal}
           onComplete={handleScopesSelect}
         />
       )}
