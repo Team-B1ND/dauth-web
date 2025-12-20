@@ -123,6 +123,7 @@ const ProfilePage = () => {
                     registrationDate={selectedService.createdAt}
                     owner={selectedService.ownerId}
                     clientId={selectedService.clientId}
+                    clientSecret={selectedService.clientSecret}
                     frameworks={selectedService.frameworks}
                   />
                 ) : (

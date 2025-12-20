@@ -4,6 +4,7 @@ import SetURLModal from "src/components/Profile/ServiceModal/SetURLModal";
 import SetMasterModal from "src/components/Profile/ServiceModal/SetMasterModal";
 import FixServiceNameModal from "src/components/Profile/ServiceModal/FixServiceNameModal";
 import SelectFrameworkModal from "src/components/Profile/ServiceModal/SelectFrameworkModal";
+import ClientCredentialsModal from "src/components/Profile/ServiceModal/ClientCredentialsModal";
 import { EScopes } from "src/enum/auth/auth.enum";
 import { FrameWork } from "src/types/App/app.type";
 import { ModalState } from "src/hooks/Modal/useServiceModals";
@@ -12,6 +13,7 @@ export interface UseServiceDetailsModalsParams {
   modals: ModalState;
   closeModal: (modalName: keyof ModalState) => void;
   clientId: string;
+  clientSecret: string;
   serviceName: string;
   description: string;
   mainUrl: string;
@@ -25,6 +27,7 @@ export const useServiceDetailsModals = ({
   modals,
   closeModal,
   clientId,
+  clientSecret,
   serviceName,
   description,
   mainUrl,
@@ -77,12 +80,21 @@ export const useServiceDetailsModals = ({
             currentFrameworks={frameworks}
           />
         )}
+        {modals.credentials && (
+          <ClientCredentialsModal
+            isOpen={modals.credentials}
+            close={() => closeModal("credentials")}
+            clientId={clientId}
+            clientSecret={clientSecret}
+          />
+        )}
       </>
     ),
     [
       modals,
       closeModal,
       clientId,
+      clientSecret,
       serviceName,
       description,
       mainUrl,

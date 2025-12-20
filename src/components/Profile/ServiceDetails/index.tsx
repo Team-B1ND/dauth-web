@@ -16,6 +16,7 @@ export interface ServiceDetailsProps {
   registrationDate: string;
   owner: string;
   clientId: string;
+  clientSecret: string;
   frameworks?: FrameWork[];
 }
 
@@ -28,6 +29,7 @@ const ServiceDetails = ({
   registrationDate,
   owner,
   clientId,
+  clientSecret,
   frameworks,
 }: ServiceDetailsProps) => {
   const { modals, openModal, closeModal } = useServiceModals();
@@ -37,6 +39,7 @@ const ServiceDetails = ({
     modals,
     closeModal,
     clientId,
+    clientSecret,
     serviceName,
     description,
     mainUrl,
@@ -96,6 +99,16 @@ const ServiceDetails = ({
           <S.DetailColumn>
             <span>권한</span>
             <p>{permissionsText}</p>
+          </S.DetailColumn>
+        </S.DetailContent>
+        <ChevronRight color={"lineNormal"} />
+      </S.DetailBox>
+
+      <S.DetailBox onClick={() => openModal("credentials")}>
+        <S.DetailContent>
+          <S.DetailColumn>
+            <span>클라이언트 인증 정보</span>
+            <p>Client ID, Client Secret 보기</p>
           </S.DetailColumn>
         </S.DetailContent>
         <ChevronRight color={"lineNormal"} />

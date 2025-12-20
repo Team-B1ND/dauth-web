@@ -6,6 +6,7 @@ export interface ModalState {
   scopes: boolean;
   frameworks: boolean;
   owner: boolean;
+  credentials: boolean;
 }
 
 export const useServiceModals = () => {
@@ -15,6 +16,7 @@ export const useServiceModals = () => {
     scopes: false,
     frameworks: false,
     owner: false,
+    credentials: false,
   });
 
   const openModal = (modalName: keyof ModalState) => {
@@ -32,6 +34,7 @@ export const useServiceModals = () => {
       scopes: false,
       frameworks: false,
       owner: false,
+      credentials: false,
     });
   };
 
