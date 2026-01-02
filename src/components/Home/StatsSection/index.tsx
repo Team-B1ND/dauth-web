@@ -5,6 +5,8 @@ import {
   useGetStatsUsersCountQuery,
 } from "src/queries/App/app.query";
 import CountSkeleton from "src/components/common/Skeleton/Home/Count";
+import oauth from "src/libs/OAuth/oauth";
+import MyServiceSection from "./MyServiceSection";
 
 const StatsSection = () => {
   const { data: servicesData, isLoading: servicesLoading } =
@@ -13,6 +15,7 @@ const StatsSection = () => {
     useGetStatsUsersCountQuery();
 
   const isLoading = servicesLoading || usersLoading;
+  const isLoggedIn = oauth.isLoggedIn();
 
   return (
     <S.Container>
@@ -44,9 +47,13 @@ const StatsSection = () => {
           <BarChart />
           내가 등록한 서비스
         </S.StatTitle>
-        <S.EmptyState>
-          <p>로그인이 필요합니다!</p>
-        </S.EmptyState>
+        {isLoggedIn ? (
+          <MyServiceSection />
+        ) : (
+          <S.EmptyState>
+            <p>로그인이 필요합니다!</p>
+          </S.EmptyState>
+        )}
       </S.StatBox>
 
       <S.CTAContainer>
