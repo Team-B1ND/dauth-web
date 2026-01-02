@@ -7,6 +7,7 @@ import {
 import CountSkeleton from "src/components/common/Skeleton/Home/Count";
 import oauth from "src/libs/OAuth/oauth";
 import MyServiceSection from "./MyServiceSection";
+import { useNavigate } from "react-router-dom";
 
 const StatsSection = () => {
   const { data: servicesData, isLoading: servicesLoading } =
@@ -16,6 +17,7 @@ const StatsSection = () => {
 
   const isLoading = servicesLoading || usersLoading;
   const isLoggedIn = oauth.isLoggedIn();
+  const navigate = useNavigate()
 
   return (
     <S.Container>
@@ -57,7 +59,7 @@ const StatsSection = () => {
       </S.StatBox>
 
       <S.CTAContainer>
-        <button>내 서비스 등록하러 가기</button>
+        <button onClick={() => navigate("/profile")}>내 서비스 등록하러 가기</button>
         <S.DocsCTA>
           <h4>DAuth 사용법을 알고 싶다면?</h4>
           <span>DAuth Docs ↗︎</span>
