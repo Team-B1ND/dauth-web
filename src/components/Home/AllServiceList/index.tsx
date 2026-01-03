@@ -1,27 +1,24 @@
 import ServiceCard, { ServiceCardProps } from "../ServiceCard";
-import * as S from "./style";
+import * as S from "../ServiceCardGrid/style";
 import { useGetAppsQuery } from "src/queries/App/app.query";
 import { HomeSkeleton } from "src/components/common/Skeleton";
-import { useNavigate } from "react-router-dom";
 
-const ServiceCardGrid = () => {
+const AllServiceList = () => {
   const { data, isLoading, error } = useGetAppsQuery();
-  const navigate = useNavigate();
-  const services: ServiceCardProps[] = (data?.data || [])
-    .slice(0, 6)
-    .map((app) => ({
-      title: app.name,
-      url: app.url,
-      description: app.description,
-      date: app.createdAt,
-      author: app.ownerId,
-    }));
+
+  const services: ServiceCardProps[] = (data?.data || []).map((app) => ({
+    title: app.name,
+    url: app.url,
+    description: app.description,
+    date: app.createdAt,
+    author: app.ownerId,
+  }));
 
   return (
     <S.Section>
       <S.SectionHeader>
-        <h2>사용 서비스</h2>
-        <span onClick={() => navigate("/service/list")}>더보기</span>
+        <h2>전체 서비스 목록</h2>
+        <span>{services.length}개의 서비스</span>
       </S.SectionHeader>
       <S.Grid>
         {isLoading ? (
@@ -36,4 +33,4 @@ const ServiceCardGrid = () => {
   );
 };
 
-export default ServiceCardGrid;
+export default AllServiceList;

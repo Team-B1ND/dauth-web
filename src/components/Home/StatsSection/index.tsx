@@ -5,6 +5,9 @@ import {
   useGetStatsUsersCountQuery,
 } from "src/queries/App/app.query";
 import CountSkeleton from "src/components/common/Skeleton/Home/Count";
+import oauth from "src/libs/OAuth/oauth";
+import MyServiceSection from "./MyServiceSection";
+import { useNavigate } from "react-router-dom";
 
 const StatsSection = () => {
   const { data: servicesData, isLoading: servicesLoading } =
@@ -13,6 +16,8 @@ const StatsSection = () => {
     useGetStatsUsersCountQuery();
 
   const isLoading = servicesLoading || usersLoading;
+  const isLoggedIn = oauth.isLoggedIn();
+  const navigate = useNavigate()
 
   return (
     <S.Container>
@@ -44,13 +49,17 @@ const StatsSection = () => {
           <BarChart />
           내가 등록한 서비스
         </S.StatTitle>
-        <S.EmptyState>
-          <p>로그인이 필요합니다!</p>
-        </S.EmptyState>
+        {isLoggedIn ? (
+          <MyServiceSection />
+        ) : (
+          <S.EmptyState>
+            <p>로그인이 필요합니다!</p>
+          </S.EmptyState>
+        )}
       </S.StatBox>
 
       <S.CTAContainer>
-        <button>내 서비스 등록하러 가기</button>
+        <button onClick={() => navigate("/profile")}>내 서비스 등록하러 가기</button>
         <S.DocsCTA>
           <h4>DAuth 사용법을 알고 싶다면?</h4>
           <span>DAuth Docs ↗︎</span>

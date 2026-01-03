@@ -7,6 +7,7 @@ import { usePostAuthIdLoginMutation } from "src/queries/Auth/auth.query";
 import { useAuthParams } from "src/hooks/Auth/useAuthParams";
 import { useAuthTokenFlow } from "src/hooks/Auth/useAuthTokenFlow";
 import { useGetAppNameQuery } from "src/queries/App/app.query";
+import AppNameSkeleton from "src/components/common/Skeleton/Auth/AppName";
 
 const LogIn = () => {
   const [id, setId] = useState<string>("");
@@ -14,8 +15,7 @@ const LogIn = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { clientId, redirectUrl, scopes, state } =
-    useAuthParams();
+  const { clientId, redirectUrl, scopes, state } = useAuthParams();
   const { handleAuthCode } = useAuthTokenFlow();
   const { data: appNameData } = useGetAppNameQuery(clientId);
   const appName = appNameData?.data || "서비스";
@@ -49,7 +49,14 @@ const LogIn = () => {
         <S.PointWord>
           도담도담 <span>계정으로</span>
           <br />
-          <span><strong>{appName}</strong>에 연결하기</span>
+          <span>
+            {appNameData?.data ? (
+              <strong>{appNameData.data}</strong>
+            ) : (
+              <AppNameSkeleton />
+            )}
+            에 연결하기
+          </span>
         </S.PointWord>
 
         <S.WrapIdAndPassword>

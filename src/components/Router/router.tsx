@@ -5,6 +5,7 @@ import LoginQRPage from "src/pages/Login/QR";
 import LoginIDPage from "src/pages/Login/Id";
 import OAuthCallbackPage from "src/pages/OAuth/Callback";
 import oauth from "src/libs/OAuth/oauth";
+import ServiceListPage from "src/pages/ServiceList";
 
 const LoginRedirect = () => {
   const location = useLocation();
@@ -29,6 +30,7 @@ const Router = () => {
         <Route path="/login/id" element={<LoginIDPage />} />
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
+        <Route path="/service/list" element={<ServiceListPage/>}/>
       </Routes>
     </BrowserRouter>
   );
