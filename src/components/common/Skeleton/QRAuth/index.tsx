@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { skeletonAnimtaion } from "@b1nd/b1nd-styled-components-util";
 import { DodamShape, DodamTypography } from "@b1nd/dds-web";
 import Logo from "src/assets/logo.svg";
+import AppNameSkeleton from "../Auth/AppName";
 
 const QRAuthFallbackContainer = styled.div`
   display: flex;
@@ -50,7 +51,7 @@ const QRAuthSkeleton = () => {
       <PointWord>
         도담도담 <span>계정으로</span>
         <br />
-        <span>client에 연결하기</span>
+        <span><AppNameSkeleton/>에 연결하기</span>
       </PointWord>
       <SkeletonQRCode />
       <SkeletonText />
